@@ -1,36 +1,32 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { login as apiLogin } from '../services/dataService';
 
 const AuthContext = createContext(null);
 
-const STORAGE_KEY = 'lux_auth_user';
-
-const users = [
-  { id: 1, name: 'LUX Operations', email: 'admin@lux-traffic.com.au', password: 'luxadmin2026', role: 'admin', avatar: 'LO' },
-  { id: 2, name: 'James Mitchell', email: 'james@lux-traffic.com.au', password: 'luxtm2026', role: 'manager', avatar: 'JM' },
-  { id: 3, name: 'Emma Wilson', email: 'emma@lux-traffic.com.au', password: 'luxtm2026', role: 'manager', avatar: 'EW' },
-  { id: 4, name: 'Tom Baker', email: 'tom@lux-traffic.com.au', password: 'luxtm2026', role: 'crew', avatar: 'TB' },
-  { id: 5, name: 'Sarah Connor', email: 'sarah@lux-traffic.com.au', password: 'luxtm2026', role: 'crew', avatar: 'SC' },
-  { id: 6, name: 'David Lee', email: 'david@lux-traffic.com.au', password: 'luxtm2026', role: 'viewer', avatar: 'DL' },
-];
+const USER_KEY = 'lux_auth_user';
+const TOKEN_KEY = 'lux_auth_token';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(USER_KEY);
     return stored ? JSON.parse(stored) : null;
   });
 
-  const login = (email, password) => {
-    const found = users.find(u => u.email === email && u.password === password);
-    if (!found) return false;
-    const { password: _, ...safeUser } = found;
-    setUser(safeUser);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(safeUser));
-    return true;
+  const login = async (email, password) => {
+    const data = await apiLogin(email, password);
+    if (data.success) {
+      setUser(data.user);
+      localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+      localStorage.setItem(TOKEN_KEY, data.token);
+      return true;
+    }
+    return false;
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(TOKEN_KEY);
   };
 
   const hasRole = (...roles) => user && roles.includes(user.role);

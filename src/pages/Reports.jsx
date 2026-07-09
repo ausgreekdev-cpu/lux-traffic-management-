@@ -1,147 +1,154 @@
-import { useState } from 'react';
-import { FileText, Download, CalendarDays, TrendingUp, BarChart3, RefreshCw } from 'lucide-react';
-import { generateDailyReport, generateWeeklyReport, generateCrewPerformanceReport, exportReportAsJson } from '../services/reportAgent';
+import { useState, useEffect } from 'react';
+import { BarChart3, TrendingUp, Download, RefreshCw, AlertTriangle, CheckCircle, Clock, Users } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import { getJobs, getCrew, getIncidents } from '../services/dataService';
+
+const PIE_COLORS = { 'Urgent': '#ef4444', 'High': '#ea580c', 'Medium': '#3b82f6', 'Low': '#6b7280' };
+const STATUS_COLORS = { 'Active': '#22c55e', 'Scheduled': '#3b82f6', 'Planning': '#f59e0b', 'On Hold': '#eab308', 'Completed': '#6b7280', 'Cancelled': '#ef4444' };
 
 export default function Reports() {
-  const [activeTab, setActiveTab] = useState('daily');
-  const [dailyReport, setDailyReport] = useState(null);
-  const [weeklyReport, setWeeklyReport] = useState(null);
-  const [crewReport, setCrewReport] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [jobs, setJobs] = useState([]);
+  const [crew, setCrew] = useState([]);
+  const [incidents, setIncidents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const genDaily = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setDailyReport(generateDailyReport());
-      setLoading(false);
-    }, 800);
-  };
+  useEffect(() => {
+    Promise.all([getJobs(), getCrew(), getIncidents().catch(() => [])])
+      .then(([j, c, i]) => { setJobs(j); setCrew(c); setJobs(j); setIncidents(i); })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
-  const genWeekly = () => {
-    setLoading(true);
-    const monday = new Date();
-    monday.setDate(monday.getDate() - monday.getDay() + 1);
-    setTimeout(() => {
-      setWeeklyReport(generateWeeklyReport(monday.toISOString().split('T')[0]));
-      setLoading(false);
-    }, 800);
-  };
+  const activeJobs = jobs.filter(j => j.status === 'Active');
+  const completedJobs = jobs.filter(j => j.status === 'Completed');
+  const urgentJobs = jobs.filter(j => j.priority === 'Urgent' && j.status !== 'Completed' && j.status !== 'Cancelled');
+  const completionRate = jobs.length > 0 ? Math.round((completedJobs.length / jobs.length) * 100) : 0;
 
-  const genCrew = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setCrewReport(generateCrewPerformanceReport());
-      setLoading(false);
-    }, 800);
-  };
+  const statusData = Object.entries(STATUS_COLORS).map(([name, color]) => ({ name, value: jobs.filter(j => j.status === name).length, color }));
+  const priorityData = Object.entries(PIE_COLORS).map(([name, color]) => ({ name, value: jobs.filter(j => j.priority === name).length, color }));
+
+  // Jobs over time (by month)
+  const monthMap = {};
+  jobs.forEach(j => {
+    if (!j.createdAt && !j.startDate) return;
+    const d = new Date(j.createdAt || j.startDate);
+    const key = d.toLocaleString('default', { month: 'short', year: '2-digit' });
+    monthMap[key] = (monthMap[key] || 0) + 1;
+  });
+  const trendData = Object.entries(monthMap).map(([month, count]) => ({ month, count }));
+
+  // Top clients
+  const clientMap = {};
+  jobs.forEach(j => { clientMap[j.client] = (clientMap[j.client] || 0) + 1; });
+  const topClients = Object.entries(clientMap).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([name, count]) => ({ name, count }));
+
+  // Crew workload
+  const crewMap = {};
+  jobs.filter(j => j.status === 'Active' || j.status === 'Scheduled').forEach(j => {
+    if (j.crew) crewMap[j.crew] = (crewMap[j.crew] || 0) + 1;
+  });
+  const crewData = Object.entries(crewMap).map(([name, count]) => ({ name, count }));
+
+  const exportPdf = () => window.print();
+
+  const KPI_CARD = ({ icon: Icon, label, value, sub, color }) => (
+    <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <div style={{ width: 48, height: 48, borderRadius: 10, background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color }}>
+        <Icon size={24} />
+      </div>
+      <div>
+        <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>{value}</div>
+        <div style={{ fontSize: '0.78rem', color: 'var(--lux-gray)' }}>{label}</div>
+        {sub && <div style={{ fontSize: '0.7rem', color, marginTop: 2 }}>{sub}</div>}
+      </div>
+    </div>
+  );
+
+  if (loading) return <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>Loading reports...</div>;
 
   return (
     <div>
-      <div className="page-header">
-        <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><BarChart3 size={24} /> Reports & Analytics</h1>
-        <p>Auto-generated operational reports — daily, weekly, and crew performance</p>
+      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><BarChart3 size={24} /> Reports & Analytics</h1>
+          <p>Key metrics and visual insights across all operations</p>
+        </div>
+        <button className="btn btn-outline btn-sm" onClick={exportPdf}><Download size={14} /> Export PDF</button>
       </div>
 
-      <div className="card" style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0', borderBottom: '1px solid var(--lux-border)' }}>
-          {[
-            { id: 'daily', label: 'Daily Report', icon: CalendarDays },
-            { id: 'weekly', label: 'Weekly Report', icon: TrendingUp },
-            { id: 'crew', label: 'Crew Performance', icon: FileText },
-          ].map(tab => (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              style={{
-                background: 'none', border: 'none', borderBottom: activeTab === tab.id ? '2px solid var(--lux-blue)' : '2px solid transparent',
-                padding: '0.75rem 1rem', fontWeight: activeTab === tab.id ? 600 : 400,
-                color: activeTab === tab.id ? 'var(--lux-blue)' : 'var(--lux-gray)',
-                display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer',
-              }}>
-              <tab.icon size={16} /> {tab.label}
-            </button>
-          ))}
-        </div>
-        <div style={{ padding: '1.5rem 0 0' }}>
-          {activeTab === 'daily' && (
-            <div>
-              <button className="btn btn-primary" onClick={genDaily} disabled={loading}>
-                <RefreshCw size={16} /> {loading ? 'Generating...' : 'Generate Daily Report'}
-              </button>
-              {dailyReport && (
-                <div style={{ marginTop: '1.5rem' }}>
-                  <div className="grid-4" style={{ marginBottom: '1rem' }}>
-                    <div className="card" style={{ textAlign: 'center' }}><div style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--lux-blue)' }}>{dailyReport.summary.activeJobs}</div><div style={{ fontSize: '0.75rem', color: 'var(--lux-gray)' }}>Active Jobs</div></div>
-                    <div className="card" style={{ textAlign: 'center' }}><div style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--lux-warning)' }}>{dailyReport.summary.jobsToday}</div><div style={{ fontSize: '0.75rem', color: 'var(--lux-gray)' }}>Jobs Today</div></div>
-                    <div className="card" style={{ textAlign: 'center' }}><div style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--lux-danger)' }}>{dailyReport.summary.incidentsToday}</div><div style={{ fontSize: '0.75rem', color: 'var(--lux-gray)' }}>Incidents Today</div></div>
-                    <div className="card" style={{ textAlign: 'center' }}><div style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--lux-success)' }}>{dailyReport.summary.hoursLogged}h</div><div style={{ fontSize: '0.75rem', color: 'var(--lux-gray)' }}>Hours Logged</div></div>
-                  </div>
-                  <button className="btn btn-sm btn-outline" onClick={() => exportReportAsJson(dailyReport)}><Download size={14} /> Export JSON</button>
-                  <div style={{ marginTop: '1rem', fontSize: '0.8rem', color: 'var(--lux-gray)' }}>Generated: {new Date(dailyReport.generatedAt).toLocaleString()} by {dailyReport.generatedBy}</div>
-                </div>
-              )}
-            </div>
-          )}
+      <div className="grid-4" style={{ marginBottom: '1.5rem' }}>
+        <KPI_CARD icon={BarChart3} label="Total Jobs" value={jobs.length} sub={`${activeJobs.length} active`} color="#264f97" />
+        <KPI_CARD icon={CheckCircle} label="Completion Rate" value={`${completionRate}%`} sub={`${completedJobs.length} completed`} color="#10b981" />
+        <KPI_CARD icon={AlertTriangle} label="Urgent Jobs" value={urgentJobs.length} sub="Requiring attention" color="#ef4444" />
+        <KPI_CARD icon={Users} label="Crews Deployed" value={Object.keys(crewMap).length} sub={`${crew.length} total crews`} color="#3b82f6" />
+      </div>
 
-          {activeTab === 'weekly' && (
-            <div>
-              <button className="btn btn-primary" onClick={genWeekly} disabled={loading}>
-                <RefreshCw size={16} /> {loading ? 'Generating...' : 'Generate Weekly Report'}
-              </button>
-              {weeklyReport && (
-                <div style={{ marginTop: '1.5rem' }}>
-                  <div className="grid-4" style={{ marginBottom: '1rem' }}>
-                    <div className="card" style={{ textAlign: 'center' }}><div style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--lux-blue)' }}>{weeklyReport.summary.jobsInPeriod}</div><div style={{ fontSize: '0.75rem', color: 'var(--lux-gray)' }}>Jobs This Week</div></div>
-                    <div className="card" style={{ textAlign: 'center' }}><div style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--lux-danger)' }}>{weeklyReport.summary.incidentsInPeriod}</div><div style={{ fontSize: '0.75rem', color: 'var(--lux-gray)' }}>Incidents</div></div>
-                    <div className="card" style={{ textAlign: 'center' }}><div style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--lux-success)' }}>{weeklyReport.summary.totalHours}h</div><div style={{ fontSize: '0.75rem', color: 'var(--lux-gray)' }}>Total Hours</div></div>
-                    <div className="card" style={{ textAlign: 'center' }}><div style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--lux-warning)' }}>{weeklyReport.summary.pendingTimesheets}</div><div style={{ fontSize: '0.75rem', color: 'var(--lux-gray)' }}>Pending Timesheets</div></div>
-                  </div>
-                  <div className="grid-2">
-                    <div><strong>Jobs by Status:</strong> {Object.entries(weeklyReport.statusBreakdown).map(([k, v]) => <span key={k} className="badge badge-info" style={{ marginLeft: '0.3rem' }}>{k}: {v}</span>)}</div>
-                    <div><strong>Jobs by Type:</strong> {Object.entries(weeklyReport.jobsByType).map(([k, v]) => <span key={k} className="badge badge-active" style={{ marginLeft: '0.3rem' }}>{k}: {v}</span>)}</div>
-                  </div>
-                  <div style={{ marginTop: '0.75rem' }}>
-                    <button className="btn btn-sm btn-outline" onClick={() => exportReportAsJson(weeklyReport)}><Download size={14} /> Export JSON</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeTab === 'crew' && (
-            <div>
-              <button className="btn btn-primary" onClick={genCrew} disabled={loading}>
-                <RefreshCw size={16} /> {loading ? 'Generating...' : 'Generate Crew Performance Report'}
-              </button>
-              {crewReport && (
-                <div style={{ marginTop: '1.5rem' }}>
-                  <table>
-                    <thead>
-                      <tr><th>Crew</th><th>Leader</th><th>Total Jobs</th><th>Active</th><th>Completed</th><th>Utilization</th></tr>
-                    </thead>
-                    <tbody>
-                      {crewReport.map(c => (
-                        <tr key={c.crewName}>
-                          <td style={{ fontWeight: 500 }}>{c.crewName}</td>
-                          <td>{c.leader}</td>
-                          <td>{c.totalJobs}</td>
-                          <td><span className="badge badge-info">{c.activeJobs}</span></td>
-                          <td><span className="badge badge-active">{c.completedJobs}</span></td>
-                          <td>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                              <div style={{ flex: 1, height: 6, background: '#e2e8f0', borderRadius: 3 }}>
-                                <div style={{ width: `${c.utilization}%`, height: '100%', background: c.utilization > 80 ? 'var(--lux-danger)' : c.utilization > 50 ? 'var(--lux-warning)' : 'var(--lux-success)', borderRadius: 3 }} />
-                              </div>
-                              <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{c.utilization}%</span>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          )}
+      <div className="grid-2" style={{ marginBottom: '1.5rem' }}>
+        <div className="card">
+          <h3 style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.03em', color: 'var(--lux-gray)' }}>Jobs by Status</h3>
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={statusData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Bar dataKey="value" radius={[4, 4, 0, 0]}>{statusData.map(d => <Cell key={d.name} fill={d.color} />)}</Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
+
+        <div className="card">
+          <h3 style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.03em', color: 'var(--lux-gray)' }}>Jobs by Priority</h3>
+          <ResponsiveContainer width="100%" height={280}>
+            <PieChart>
+              <Pie data={priorityData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                {priorityData.map(d => <Cell key={d.name} fill={d.color} />)}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="grid-2" style={{ marginBottom: '1.5rem' }}>
+        <div className="card">
+          <h3 style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.03em', color: 'var(--lux-gray)' }}>Jobs Created Over Time</h3>
+          <ResponsiveContainer width="100%" height={280}>
+            <LineChart data={trendData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+              <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Line type="monotone" dataKey="count" stroke="#264f97" strokeWidth={2} dot={{ fill: '#264f97', r: 4 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="card">
+          <h3 style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.03em', color: 'var(--lux-gray)' }}>Crew Workload</h3>
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={crewData.length > 0 ? crewData : [{ name: 'No data', count: 0 }]} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+              <XAxis type="number" allowDecimals={false} />
+              <YAxis dataKey="name" type="category" tick={{ fontSize: 12 }} width={100} />
+              <Tooltip />
+              <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3 style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.03em', color: 'var(--lux-gray)' }}>Top Clients by Job Count</h3>
+        <ResponsiveContainer width="100%" height={280}>
+          <BarChart data={topClients.length > 0 ? topClients : [{ name: 'No data', count: 0 }]}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+            <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Bar dataKey="count" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );

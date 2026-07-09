@@ -20,6 +20,11 @@ import Reports from './pages/Reports';
 import Scoping from './pages/Scoping';
 import Quotes from './pages/Quotes';
 import LuxRepository from './pages/LuxRepository';
+import AuditLog from './pages/AuditLog';
+import BulkImport from './pages/BulkImport';
+import CalendarView from './pages/CalendarView';
+import Notifications from './pages/Notifications';
+import KanbanBoard from './pages/KanbanBoard';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
@@ -49,6 +54,11 @@ function AppRoutes() {
         <Route path="scoping" element={<Scoping />} />
         <Route path="quotes" element={<Quotes />} />
         <Route path="lux-repository" element={<LuxRepository />} />
+        <Route path="kanban" element={<KanbanBoard />} />
+        <Route path="notifications" element={<Notifications />} />
+        <Route path="calendar" element={<CalendarView />} />
+        <Route path="import" element={<BulkImport />} />
+        <Route path="audit-log" element={<AuditLog />} />
         <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,15 +1,18 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, ClipboardList, Users, HardHat, Wrench, Mail, FileDown, Settings, Menu, LogOut, AlertTriangle, FileText, CalendarDays, ShieldCheck, Bot, BarChart3, Zap, ClipboardCheck, DollarSign, BookOpen } from 'lucide-react';
-import { useState } from 'react';
+import { LayoutDashboard, ClipboardList, Users, HardHat, Wrench, Mail, FileDown, Settings, Menu, LogOut, AlertTriangle, FileText, CalendarDays, ShieldCheck, Bot, BarChart3, Zap, ClipboardCheck, DollarSign, BookOpen, History, Upload, Calendar, Bell, Columns3 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import NotificationBell from './NotificationBell';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard', roles: ['admin', 'manager', 'crew', 'viewer'] },
   { to: '/jobs', icon: ClipboardList, label: 'Job Board', roles: ['admin', 'manager', 'crew', 'viewer'] },
+  { to: '/kanban', icon: Columns3, label: 'Kanban', roles: ['admin', 'manager'] },
   { to: '/clients', icon: Users, label: 'Clients', roles: ['admin', 'manager'] },
   { to: '/scoping', icon: ClipboardCheck, label: 'Scoping & Intake', roles: ['admin', 'manager'] },
   { to: '/quotes', icon: DollarSign, label: 'Quotes & Proposals', roles: ['admin', 'manager'] },
   { to: '/lux-repository', icon: BookOpen, label: 'LUX Repository', roles: ['admin', 'manager', 'crew'] },
+  { to: '/calendar', icon: Calendar, label: 'Schedule', roles: ['admin', 'manager', 'crew', 'viewer'] },
   { to: '/crew', icon: HardHat, label: 'Crew', roles: ['admin', 'manager'] },
   { to: '/timesheets', icon: CalendarDays, label: 'Timesheets', roles: ['admin', 'manager', 'crew'] },
   { to: '/incidents', icon: AlertTriangle, label: 'Incidents', roles: ['admin', 'manager', 'crew'] },
@@ -20,7 +23,10 @@ const navItems = [
   { to: '/reports', icon: BarChart3, label: 'Reports', roles: ['admin', 'manager', 'viewer'] },
   { to: '/equipment', icon: Wrench, label: 'Equipment', roles: ['admin', 'manager', 'crew'] },
   { to: '/email', icon: Mail, label: 'Email & Templates', roles: ['admin', 'manager'] },
+  { to: '/notifications', icon: Bell, label: 'Notifications', roles: ['admin', 'manager', 'crew'] },
+  { to: '/import', icon: Upload, label: 'Bulk Import', roles: ['admin', 'manager'] },
   { to: '/export', icon: FileDown, label: 'Export', roles: ['admin', 'manager', 'viewer'] },
+  { to: '/audit-log', icon: History, label: 'Audit Log', roles: ['admin'] },
   { to: '/settings', icon: Settings, label: 'Settings', roles: ['admin'] },
 ];
 
@@ -36,6 +42,17 @@ export default function Layout() {
 
   const visibleItems = navItems.filter(item => item.roles.some(r => hasRole(r)));
 
+  useEffect(() => {
+    const apply = () => {
+      const isDark = localStorage.getItem('lux_dark_mode') === 'true';
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    };
+    apply();
+    window.addEventListener('themechange', apply);
+    window.addEventListener('storage', (e) => { if (e.key === 'lux_dark_mode') apply(); });
+    return () => { window.removeEventListener('themechange', apply); };
+  }, []);
+
   return (
     <div className="app-layout" style={{ display: 'flex', minHeight: '100vh' }}>
       <aside className={`sidebar ${sidebarOpen ? 'sidebar--open' : ''}`}>
@@ -43,9 +60,9 @@ export default function Layout() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div style={{
               width: 40, height: 40, borderRadius: 10,
-              background: 'var(--lux-gold)',
+              background: '#fff',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontWeight: 800, fontSize: '1.2rem', color: '#1e293b',
+              fontWeight: 800, fontSize: '1.2rem', color: 'var(--lux-blue)',
             }}>L</div>
             <div>
               <div style={{ fontWeight: 700, fontSize: '1rem', lineHeight: 1.2 }}>LUX Traffic</div>
@@ -87,6 +104,7 @@ export default function Layout() {
           </button>
           <div style={{ flex: 1 }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <NotificationBell />
             {user && (
               <>
                 <div style={{ textAlign: 'right' }}>
@@ -95,7 +113,7 @@ export default function Layout() {
                 </div>
                 <div style={{
                   width: 36, height: 36, borderRadius: '50%',
-                  background: 'var(--lux-gold)', color: '#1e293b',
+                  background: 'var(--lux-blue)', color: '#fff',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontWeight: 700, fontSize: '0.9rem',
                 }}>{user.avatar}</div>
@@ -178,6 +196,10 @@ export default function Layout() {
           }
           .menu-toggle {
             display: flex;
+          }
+          .sidebar nav a {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
           }
         }
 

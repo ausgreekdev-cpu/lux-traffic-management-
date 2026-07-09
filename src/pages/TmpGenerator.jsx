@@ -44,22 +44,22 @@ export default function TmpGenerator() {
 <html><head><meta charset="UTF-8"><title>TMP ${doc.id}</title>
 <style>
   @page { margin: 20mm; size: A4; }
-  body { font-family: 'Inter', Arial, sans-serif; color: #1e293b; line-height: 1.5; font-size: 11pt; }
-  .header { text-align: center; border-bottom: 3px solid #0a2e5c; padding-bottom: 1rem; margin-bottom: 1.5rem; }
-  .header h1 { color: #0a2e5c; font-size: 18pt; margin: 0; }
-  .header h2 { color: #f5a623; font-size: 14pt; margin: 0.25rem 0; font-weight: 400; }
+  body { font-family: 'Montserrat', Arial, sans-serif; color: #2b2b2b; line-height: 1.5; font-size: 11pt; }
+  .header { text-align: center; border-bottom: 3px solid #264f97; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+  .header h1 { color: #264f97; font-size: 18pt; margin: 0; }
+  .header h2 { color: #264f97; font-size: 14pt; margin: 0.25rem 0; font-weight: 400; }
   .header p { color: #6b7280; font-size: 9pt; }
   .section { margin-bottom: 1.25rem; }
-  .section h3 { background: #0a2e5c; color: #fff; padding: 0.4rem 0.75rem; font-size: 11pt; margin: 0 0 0.5rem 0; border-radius: 4px; }
+  .section h3 { background: #264f97; color: #fff; padding: 0.4rem 0.75rem; font-size: 11pt; margin: 0 0 0.5rem 0; border-radius: 0; }
   table { width: 100%; border-collapse: collapse; margin-bottom: 0.75rem; }
   td, th { border: 1px solid #e2e8f0; padding: 0.35rem 0.5rem; text-align: left; font-size: 10pt; }
   th { background: #f8f9fc; font-weight: 600; }
   .badge-ok { color: #065f46; background: #d1fae5; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 9pt; }
   .badge-warn { color: #92400e; background: #fef3c7; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 9pt; }
   .footer { text-align: center; font-size: 8pt; color: #9ca3af; margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 0.75rem; }
-  .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.04; font-size: 60pt; font-weight: 800; color: #0a2e5c; pointer-events: none; z-index: -1; }
+  .watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.04; font-size: 60pt; font-weight: 800; color: #264f97; pointer-events: none; z-index: -1; }
   .signature-block { display: flex; justify-content: space-between; margin-top: 2rem; }
-  .signature-line { border-top: 1px solid #1e293b; width: 200px; padding-top: 0.25rem; font-size: 9pt; text-align: center; }
+  .signature-line { border-top: 1px solid #2b2b2b; width: 200px; padding-top: 0.25rem; font-size: 9pt; text-align: center; }
 </style></head>
 <body>
 <div class="watermark">LUX TRAFFIC MANAGEMENT</div>

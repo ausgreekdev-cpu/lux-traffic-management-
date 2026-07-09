@@ -51,6 +51,16 @@ export default function Settings() {
     ];
   });
 
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('lux_dark_mode') === 'true');
+
+  const toggleDarkMode = () => {
+    const next = !darkMode;
+    setDarkMode(next);
+    localStorage.setItem('lux_dark_mode', next.toString());
+    document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light');
+    window.dispatchEvent(new Event('themechange'));
+  };
+
   useEffect(() => {
     setTemplates(getTemplates());
     setAutoConfig(getAutomationConfig());
@@ -123,8 +133,31 @@ export default function Settings() {
       </div>
 
       {activeTab === 'general' && (
-        <div className="grid-2" style={{ marginBottom: '1.5rem' }}>
-          <div className="card">
+        <div>
+          <div className="card" style={{ marginBottom: '1.5rem' }}>
+            <h3 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '1rem' }}>Appearance</h3>
+            <p style={{ fontSize: '0.8rem', color: 'var(--lux-gray)', marginBottom: '1rem' }}>Toggle between light and dark mode.</p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 0', borderTop: '1px solid var(--lux-border)' }}>
+              <div>
+                <div style={{ fontWeight: 500, fontSize: '0.85rem' }}>Dark Mode</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--lux-gray)' }}>{darkMode ? 'Dark theme active' : 'Light theme active'}</div>
+              </div>
+              <label style={{ position: 'relative', display: 'inline-block', width: 44, height: 24 }}>
+                <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} style={{ opacity: 0, width: 0, height: 0 }} />
+                <span style={{
+                  position: 'absolute', cursor: 'pointer', inset: 0, borderRadius: 24, transition: '0.3s',
+                  background: darkMode ? 'var(--lux-blue)' : '#d1d5db',
+                }}>
+                  <span style={{
+                    position: 'absolute', height: 20, width: 20, left: darkMode ? 22 : 2, top: 2,
+                    borderRadius: '50%', background: '#fff', transition: '0.3s',
+                  }} />
+                </span>
+              </label>
+            </div>
+          </div>
+          <div className="grid-2" style={{ marginBottom: '1.5rem' }}>
+            <div className="card">
             <h3 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '1rem' }}>Job Statuses</h3>
             <p style={{ fontSize: '0.8rem', color: 'var(--lux-gray)', marginBottom: '1rem' }}>Customize workflow statuses available in the Job Board.</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
@@ -162,9 +195,10 @@ export default function Settings() {
               </div>
             </div>
           </div>
+          </div>
         </div>
       )}
-
+ 
       {activeTab === 'email' && (
         <div>
           <div className="card" style={{ marginBottom: '1.5rem' }}>

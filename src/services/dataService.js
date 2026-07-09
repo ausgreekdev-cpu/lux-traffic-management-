@@ -1,10 +1,21 @@
 const API = 'http://localhost:3001';
 
+function getAuthHeaders() {
+  const token = localStorage.getItem('lux_auth_token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
 async function request(path, options = {}) {
   const res = await fetch(`${API}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
+    headers: { 'Content-Type': 'application/json', ...getAuthHeaders(), ...options.headers },
     ...options,
   });
+  if (res.status === 401 || res.status === 403) {
+    localStorage.removeItem('lux_auth_token');
+    localStorage.removeItem('lux_auth_user');
+    window.location.href = '/login';
+    throw new Error('Session expired');
+  }
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: res.statusText }));
     throw new Error(err.error || `Request failed: ${res.status}`);
@@ -49,7 +60,7 @@ export async function uploadAttachment(file, jobId, clientId, { category, descri
   form.append('description', description || '');
   form.append('tags', tags || '');
   form.append('uploadedBy', uploadedBy || 'system');
-  const res = await fetch(`${API}/api/upload`, { method: 'POST', body: form });
+  const res = await fetch(`${API}/api/upload`, { method: 'POST', body: form, headers: { ...getAuthHeaders() } });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: 'Upload failed' }));
     throw new Error(err.error);
@@ -72,7 +83,7 @@ export async function uploadLuxDocument(file, { title, category, description, ta
   form.append('version', version || '1.0');
   form.append('status', status || 'active');
   form.append('uploadedBy', uploadedBy || 'system');
-  const res = await fetch(`${API}/api/lux/upload`, { method: 'POST', body: form });
+  const res = await fetch(`${API}/api/lux/upload`, { method: 'POST', body: form, headers: { ...getAuthHeaders() } });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: 'Upload failed' }));
     throw new Error(err.error);
@@ -88,6 +99,25 @@ export const getEquipment = () => request('/equipment');
 export const getPermits = () => request('/permits');
 export const getIncidents = () => request('/incidents');
 export const getTimesheets = () => request('/timesheets');
+
+// ── Audit Log ──
+export function getAuditLog() { return request('/auditLog'); }
+
+// ── Notifications ──
+export function getNotifications() { return request('/notifications'); }
+export function markNotificationRead(id) { return request(`/notifications/${id}`, { method: 'PATCH', body: JSON.stringify({ read: true }) }); }
+export function deleteNotification(id) { return request(`/notifications/${id}`, { method: 'DELETE' }); }
+
+// ── CSV Import ──
+export async function importCsv(file, target) {
+  const form = new FormData();
+  form.append('file', file);
+  form.append('target', target);
+  const res = await fetch(`${API}/api/import/csv`, { method: 'POST', body: form, headers: { ...getAuthHeaders() } });
+  const data = await res.json();
+  if (!res.ok || data.error) throw new Error(data.error || 'Import failed');
+  return data;
+}
 
 // ── Login ──
 export async function login(email, password) {
