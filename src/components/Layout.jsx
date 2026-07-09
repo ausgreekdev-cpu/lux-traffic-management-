@@ -1,0 +1,192 @@
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, ClipboardList, Users, HardHat, Wrench, Mail, FileDown, Settings, Menu, LogOut, AlertTriangle, FileText, CalendarDays, ShieldCheck, Bot, BarChart3, Zap, ClipboardCheck, DollarSign, BookOpen } from 'lucide-react';
+import { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+
+const navItems = [
+  { to: '/', icon: LayoutDashboard, label: 'Dashboard', roles: ['admin', 'manager', 'crew', 'viewer'] },
+  { to: '/jobs', icon: ClipboardList, label: 'Job Board', roles: ['admin', 'manager', 'crew', 'viewer'] },
+  { to: '/clients', icon: Users, label: 'Clients', roles: ['admin', 'manager'] },
+  { to: '/scoping', icon: ClipboardCheck, label: 'Scoping & Intake', roles: ['admin', 'manager'] },
+  { to: '/quotes', icon: DollarSign, label: 'Quotes & Proposals', roles: ['admin', 'manager'] },
+  { to: '/lux-repository', icon: BookOpen, label: 'LUX Repository', roles: ['admin', 'manager', 'crew'] },
+  { to: '/crew', icon: HardHat, label: 'Crew', roles: ['admin', 'manager'] },
+  { to: '/timesheets', icon: CalendarDays, label: 'Timesheets', roles: ['admin', 'manager', 'crew'] },
+  { to: '/incidents', icon: AlertTriangle, label: 'Incidents', roles: ['admin', 'manager', 'crew'] },
+  { to: '/permits', icon: ShieldCheck, label: 'Permits', roles: ['admin', 'manager'] },
+  { to: '/tmp-generator', icon: FileText, label: 'TMP Generator', roles: ['admin', 'manager'] },
+  { to: '/agents', icon: Bot, label: 'Agents', roles: ['admin', 'manager'] },
+  { to: '/automation', icon: Zap, label: 'Automation', roles: ['admin'] },
+  { to: '/reports', icon: BarChart3, label: 'Reports', roles: ['admin', 'manager', 'viewer'] },
+  { to: '/equipment', icon: Wrench, label: 'Equipment', roles: ['admin', 'manager', 'crew'] },
+  { to: '/email', icon: Mail, label: 'Email & Templates', roles: ['admin', 'manager'] },
+  { to: '/export', icon: FileDown, label: 'Export', roles: ['admin', 'manager', 'viewer'] },
+  { to: '/settings', icon: Settings, label: 'Settings', roles: ['admin'] },
+];
+
+export default function Layout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, logout, hasRole } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  const visibleItems = navItems.filter(item => item.roles.some(r => hasRole(r)));
+
+  return (
+    <div className="app-layout" style={{ display: 'flex', minHeight: '100vh' }}>
+      <aside className={`sidebar ${sidebarOpen ? 'sidebar--open' : ''}`}>
+        <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{
+              width: 40, height: 40, borderRadius: 10,
+              background: 'var(--lux-gold)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontWeight: 800, fontSize: '1.2rem', color: '#1e293b',
+            }}>L</div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '1rem', lineHeight: 1.2 }}>LUX Traffic</div>
+              <div style={{ fontSize: '0.7rem', opacity: 0.7 }}>Management Portal</div>
+            </div>
+          </div>
+        </div>
+        <nav style={{ flex: 1, padding: '0.75rem', overflowY: 'auto' }}>
+          {visibleItems.map(item => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              onClick={() => setSidebarOpen(false)}
+              style={({ isActive }) => ({
+                display: 'flex', alignItems: 'center', gap: '0.75rem',
+                padding: '0.65rem 1rem', borderRadius: 8,
+                marginBottom: 2, fontSize: '0.85rem', fontWeight: 500,
+                background: isActive ? 'rgba(255,255,255,0.12)' : 'transparent',
+                color: isActive ? '#fff' : 'rgba(255,255,255,0.7)',
+                transition: 'all 0.2s',
+              })}
+            >
+              <item.icon size={18} />
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+        <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.1)', fontSize: '0.75rem', opacity: 0.5 }}>
+          LUX Traffic Management v2.0<br />
+          Perth, Western Australia
+        </div>
+      </aside>
+
+      <div className="main-area">
+        <header className="top-header">
+          <button className="menu-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            <Menu size={20} />
+          </button>
+          <div style={{ flex: 1 }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            {user && (
+              <>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 600 }}>{user.name}</div>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--lux-gray)' }}>{user.email}</div>
+                </div>
+                <div style={{
+                  width: 36, height: 36, borderRadius: '50%',
+                  background: 'var(--lux-gold)', color: '#1e293b',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontWeight: 700, fontSize: '0.9rem',
+                }}>{user.avatar}</div>
+                <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: 'var(--lux-gray)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem' }}>
+                  <LogOut size={16} /> Logout
+                </button>
+              </>
+            )}
+          </div>
+        </header>
+        <main className="main-content">
+          <Outlet />
+        </main>
+      </div>
+
+      <style>{`
+        .sidebar {
+          width: var(--sidebar-width);
+          min-width: var(--sidebar-width);
+          background: var(--lux-blue);
+          color: #fff;
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+          position: fixed;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          z-index: 100;
+        }
+
+        .main-area {
+          margin-left: var(--sidebar-width);
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+        }
+
+        .top-header {
+          height: var(--header-height);
+          border-bottom: 1px solid var(--lux-border);
+          background: #fff;
+          display: flex;
+          align-items: center;
+          padding: 0 1.5rem;
+          position: sticky;
+          top: 0;
+          z-index: 50;
+        }
+
+        .menu-toggle {
+          background: none;
+          border: none;
+          display: none;
+          margin-right: 0.75rem;
+          cursor: pointer;
+          color: var(--lux-gray);
+        }
+
+        .main-content {
+          flex: 1;
+          padding: 1.5rem;
+          max-width: 1400px;
+          width: 100%;
+          margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+          .sidebar {
+            position: fixed;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+          }
+          .sidebar.sidebar--open {
+            transform: translateX(0);
+          }
+          .main-area {
+            margin-left: 0;
+          }
+          .menu-toggle {
+            display: flex;
+          }
+        }
+
+        @media (min-width: 769px) {
+          .sidebar {
+            position: fixed;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
