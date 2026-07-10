@@ -1,76 +1,678 @@
 {
   "users": [
-    { "id": 1, "name": "LUX Operations", "email": "admin@lux-traffic.com.au", "password": "luxadmin2026", "role": "admin", "avatar": "LO" },
-    { "id": 2, "name": "James Mitchell", "email": "james@lux-traffic.com.au", "password": "luxtm2026", "role": "manager", "avatar": "JM" },
-    { "id": 3, "name": "Emma Wilson", "email": "emma@lux-traffic.com.au", "password": "luxtm2026", "role": "manager", "avatar": "EW" },
-    { "id": 4, "name": "Tom Baker", "email": "tom@lux-traffic.com.au", "password": "luxtm2026", "role": "crew", "avatar": "TB" },
-    { "id": 5, "name": "Sarah Connor", "email": "sarah@lux-traffic.com.au", "password": "luxtm2026", "role": "crew", "avatar": "SC" },
-    { "id": 6, "name": "David Lee", "email": "david@lux-traffic.com.au", "password": "luxtm2026", "role": "viewer", "avatar": "DL" }
+    {
+      "id": 1,
+      "name": "LUX Operations",
+      "email": "admin@lux-traffic.com.au",
+      "password": "luxadmin2026",
+      "role": "admin",
+      "avatar": "LO"
+    },
+    {
+      "id": 2,
+      "name": "James Mitchell",
+      "email": "james@lux-traffic.com.au",
+      "password": "luxtm2026",
+      "role": "manager",
+      "avatar": "JM"
+    },
+    {
+      "id": 3,
+      "name": "Emma Wilson",
+      "email": "emma@lux-traffic.com.au",
+      "password": "luxtm2026",
+      "role": "manager",
+      "avatar": "EW"
+    },
+    {
+      "id": 4,
+      "name": "Tom Baker",
+      "email": "tom@lux-traffic.com.au",
+      "password": "luxtm2026",
+      "role": "crew",
+      "avatar": "TB"
+    },
+    {
+      "id": 5,
+      "name": "Sarah Connor",
+      "email": "sarah@lux-traffic.com.au",
+      "password": "luxtm2026",
+      "role": "crew",
+      "avatar": "SC"
+    },
+    {
+      "id": 6,
+      "name": "David Lee",
+      "email": "david@lux-traffic.com.au",
+      "password": "luxtm2026",
+      "role": "viewer",
+      "avatar": "DL"
+    }
   ],
   "clients": [
-    { "id": "CLT-001", "name": "Main Roads WA", "email": "projects@mainroads.wa.gov.au", "phone": "(08) 9323 4111", "address": "Don Aitken Centre, 58 Don Aitken Approach, East Perth WA 6004", "type": "Government", "status": "Active", "industry": "Government Agency", "region": "Metro Perth", "accountManager": "Emma Wilson", "notes": "Key client. All MRWA TMPs require RTM review.", "createdAt": "2025-01-15T08:00:00Z" },
-    { "id": "CLT-002", "name": "City of Perth", "email": "traffic@cityofperth.wa.gov.au", "phone": "(08) 9461 3333", "address": "27 St Georges Terrace, Perth WA 6000", "type": "Council", "status": "Active", "industry": "Local Government", "region": "Metro Perth", "accountManager": "James Mitchell", "notes": "Night works require noise exemption. Pedestrian management critical.", "createdAt": "2025-02-01T10:00:00Z" },
-    { "id": "CLT-003", "name": "Georgiou Group", "email": "projects@georgiou.com.au", "phone": "(08) 9477 4900", "address": "15 Yampi Way, Willetton WA 6155", "type": "Contractor", "status": "Active", "industry": "Civil Construction", "region": "Metro Perth", "accountManager": "Emma Wilson", "notes": "Major infrastructure contractor. Multiple concurrent projects.", "createdAt": "2025-01-20T09:00:00Z" },
-    { "id": "CLT-004", "name": "BGC Construction", "email": "traffic@bgc.com.au", "phone": "(08) 9410 1000", "address": "50 Bannister Road, Canning Vale WA 6155", "type": "Contractor", "status": "Active", "industry": "Construction", "region": "Metro Perth", "accountManager": "", "notes": "", "createdAt": "2025-03-10T11:00:00Z" },
-    { "id": "CLT-005", "name": "City of Stirling", "email": "traffic@stirling.wa.gov.au", "phone": "(08) 9205 8555", "address": "25 Cedric Street, Stirling WA 6021", "type": "Council", "status": "Active", "industry": "Local Government", "region": "Metro Perth", "accountManager": "James Mitchell", "notes": "School zone timing restrictions apply.", "createdAt": "2025-02-15T14:00:00Z" },
-    { "id": "CLT-006", "name": "Lendlease WA", "email": "perth@lendlease.com.au", "phone": "(08) 9220 1000", "address": "197 St Georges Terrace, Perth WA 6000", "type": "Contractor", "status": "Active", "industry": "Development", "region": "Metro Perth", "accountManager": "", "notes": "", "createdAt": "2025-04-01T08:00:00Z" },
-    { "id": "CLT-007", "name": "City of Fremantle", "email": "traffic@fremantle.wa.gov.au", "phone": "(08) 9432 9999", "address": "10 William Street, Fremantle WA 6160", "type": "Council", "status": "Active", "industry": "Local Government", "region": "Metro Perth", "accountManager": "", "notes": "Heritage area restrictions. Narrow streets.", "createdAt": "2025-05-01T09:00:00Z" },
-    { "id": "CLT-008", "name": "WA Police - Traffic Command", "email": "traffic@police.wa.gov.au", "phone": "(08) 9217 4000", "address": "60-68 Beaufort Street, Perth WA 6000", "type": "Government", "status": "Active", "industry": "Government Agency", "region": "Metro Perth", "accountManager": "", "notes": "Full road closures require Police notification 14 days prior.", "createdAt": "2025-03-01T10:00:00Z" }
+    {
+      "id": "CLT-001",
+      "name": "Main Roads WA",
+      "email": "projects@mainroads.wa.gov.au",
+      "phone": "(08) 9323 4111",
+      "address": "Don Aitken Centre, 58 Don Aitken Approach, East Perth WA 6004",
+      "type": "Government",
+      "status": "Active",
+      "industry": "Government Agency",
+      "region": "Metro Perth",
+      "accountManager": "Emma Wilson",
+      "notes": "Key client. All MRWA TMPs require RTM review.",
+      "createdAt": "2025-01-15T08:00:00Z"
+    },
+    {
+      "id": "CLT-002",
+      "name": "City of Perth",
+      "email": "traffic@cityofperth.wa.gov.au",
+      "phone": "(08) 9461 3333",
+      "address": "27 St Georges Terrace, Perth WA 6000",
+      "type": "Council",
+      "status": "Active",
+      "industry": "Local Government",
+      "region": "Metro Perth",
+      "accountManager": "James Mitchell",
+      "notes": "Night works require noise exemption. Pedestrian management critical.",
+      "createdAt": "2025-02-01T10:00:00Z"
+    },
+    {
+      "id": "CLT-003",
+      "name": "Georgiou Group",
+      "email": "projects@georgiou.com.au",
+      "phone": "(08) 9477 4900",
+      "address": "15 Yampi Way, Willetton WA 6155",
+      "type": "Contractor",
+      "status": "Active",
+      "industry": "Civil Construction",
+      "region": "Metro Perth",
+      "accountManager": "Emma Wilson",
+      "notes": "Major infrastructure contractor. Multiple concurrent projects.",
+      "createdAt": "2025-01-20T09:00:00Z"
+    },
+    {
+      "id": "CLT-004",
+      "name": "BGC Construction",
+      "email": "traffic@bgc.com.au",
+      "phone": "(08) 9410 1000",
+      "address": "50 Bannister Road, Canning Vale WA 6155",
+      "type": "Contractor",
+      "status": "Active",
+      "industry": "Construction",
+      "region": "Metro Perth",
+      "accountManager": "",
+      "notes": "",
+      "createdAt": "2025-03-10T11:00:00Z"
+    },
+    {
+      "id": "CLT-005",
+      "name": "City of Stirling",
+      "email": "traffic@stirling.wa.gov.au",
+      "phone": "(08) 9205 8555",
+      "address": "25 Cedric Street, Stirling WA 6021",
+      "type": "Council",
+      "status": "Active",
+      "industry": "Local Government",
+      "region": "Metro Perth",
+      "accountManager": "James Mitchell",
+      "notes": "School zone timing restrictions apply.",
+      "createdAt": "2025-02-15T14:00:00Z"
+    },
+    {
+      "id": "CLT-006",
+      "name": "Lendlease WA",
+      "email": "perth@lendlease.com.au",
+      "phone": "(08) 9220 1000",
+      "address": "197 St Georges Terrace, Perth WA 6000",
+      "type": "Contractor",
+      "status": "Active",
+      "industry": "Development",
+      "region": "Metro Perth",
+      "accountManager": "",
+      "notes": "",
+      "createdAt": "2025-04-01T08:00:00Z"
+    },
+    {
+      "id": "CLT-007",
+      "name": "City of Fremantle",
+      "email": "traffic@fremantle.wa.gov.au",
+      "phone": "(08) 9432 9999",
+      "address": "10 William Street, Fremantle WA 6160",
+      "type": "Council",
+      "status": "Active",
+      "industry": "Local Government",
+      "region": "Metro Perth",
+      "accountManager": "",
+      "notes": "Heritage area restrictions. Narrow streets.",
+      "createdAt": "2025-05-01T09:00:00Z"
+    },
+    {
+      "id": "CLT-008",
+      "name": "WA Police - Traffic Command",
+      "email": "traffic@police.wa.gov.au",
+      "phone": "(08) 9217 4000",
+      "address": "60-68 Beaufort Street, Perth WA 6000",
+      "type": "Government",
+      "status": "Active",
+      "industry": "Government Agency",
+      "region": "Metro Perth",
+      "accountManager": "",
+      "notes": "Full road closures require Police notification 14 days prior.",
+      "createdAt": "2025-03-01T10:00:00Z"
+    },
+    {
+      "name": "test",
+      "email": "test@test.com",
+      "phone": "",
+      "address": "",
+      "type": "Contractor",
+      "status": "Active",
+      "industry": "test",
+      "region": "test",
+      "accountManager": "",
+      "notes": "",
+      "id": "CLT-009"
+    }
   ],
   "jobs": [
-    { "id": "JOB-001", "clientId": "CLT-001", "title": "Mitchell Frwy - Lane Closure (Southbound)", "client": "Main Roads WA", "location": "Mitchell Freeway, Perth WA", "status": "Active", "priority": "High", "type": "Lane Closure", "startDate": "2026-07-10", "endDate": "2026-07-12", "crew": "Crew A", "equipment": ["TMA Truck", "Cones", "Signs"], "emailThread": [], "notes": "Night works 8pm-5am", "attachments": [] },
-    { "id": "JOB-002", "clientId": "CLT-002", "title": "Elizabeth Quay Bus Bridge Works", "client": "City of Perth", "location": "Elizabeth Quay Bus Bridge, Perth WA", "status": "Scheduled", "priority": "Medium", "type": "Bridge Works", "startDate": "2026-07-15", "endDate": "2026-07-20", "crew": "Crew B", "equipment": ["VMS Board", "Cones", "TMA Truck"], "emailThread": [], "notes": "Major event coordination required", "attachments": [] },
-    { "id": "JOB-003", "clientId": "CLT-001", "title": "Kwinana Fwy - Shoulder Works", "client": "Main Roads WA", "location": "Kwinana Freeway, Como WA", "status": "Active", "priority": "Urgent", "type": "Shoulder Works", "startDate": "2026-07-09", "endDate": "2026-07-09", "crew": "Crew C", "equipment": ["TMA Truck", "Cones", "Arrow Board"], "emailThread": [], "notes": "Emergency pavement repair", "attachments": [] },
-    { "id": "JOB-004", "clientId": "CLT-004", "title": "Great Eastern Hwy - Utility Works", "client": "BGC Construction", "location": "Great Eastern Hwy, Redcliffe WA", "status": "Planning", "priority": "Low", "type": "Utility Works", "startDate": "2026-08-01", "endDate": "2026-08-05", "crew": "Crew A", "equipment": ["Cones", "Signs", "VMS Board"], "emailThread": [], "notes": "Gas main upgrade - TMP to MRWA", "attachments": [] },
-    { "id": "JOB-005", "clientId": "CLT-003", "title": "Roe Highway - Intersection Upgrade", "client": "Georgiou Group", "location": "Roe Hwy & Nicholson Rd, Canning Vale WA", "status": "Active", "priority": "High", "type": "Intersection Works", "startDate": "2026-07-11", "endDate": "2026-08-20", "crew": "Crew B", "equipment": ["TMA Truck", "VMS Board", "Cones", "Arrow Board", "Barriers"], "emailThread": [], "notes": "Major intersection upgrade - TMP approved", "attachments": [] },
-    { "id": "JOB-006", "clientId": "CLT-002", "title": "St Georges Tce - Event Traffic Mgmt", "client": "City of Perth", "location": "St Georges Terrace, Perth WA", "status": "Scheduled", "priority": "Medium", "type": "Event Traffic", "startDate": "2026-07-25", "endDate": "2026-07-26", "crew": "Crew C", "equipment": ["Cones", "Signs", "Barriers"], "emailThread": [], "notes": "Perth City Festival traffic plan", "attachments": [] }
+    {
+      "id": "JOB-001",
+      "clientId": "CLT-001",
+      "title": "Mitchell Frwy - Lane Closure (Southbound)",
+      "client": "Main Roads WA",
+      "location": "Mitchell Freeway, Perth WA",
+      "status": "Active",
+      "priority": "High",
+      "type": "Lane Closure",
+      "startDate": "2026-07-10",
+      "endDate": "2026-07-12",
+      "crew": "Crew A",
+      "equipment": [
+        "TMA Truck",
+        "Cones",
+        "Signs"
+      ],
+      "emailThread": [],
+      "notes": "Night works 8pm-5am",
+      "attachments": []
+    },
+    {
+      "id": "JOB-002",
+      "clientId": "CLT-002",
+      "title": "Elizabeth Quay Bus Bridge Works",
+      "client": "City of Perth",
+      "location": "Elizabeth Quay Bus Bridge, Perth WA",
+      "status": "Scheduled",
+      "priority": "Medium",
+      "type": "Bridge Works",
+      "startDate": "2026-07-15",
+      "endDate": "2026-07-20",
+      "crew": "Crew B",
+      "equipment": [
+        "VMS Board",
+        "Cones",
+        "TMA Truck"
+      ],
+      "emailThread": [],
+      "notes": "Major event coordination required",
+      "attachments": []
+    },
+    {
+      "id": "JOB-003",
+      "clientId": "CLT-001",
+      "title": "Kwinana Fwy - Shoulder Works",
+      "client": "Main Roads WA",
+      "location": "Kwinana Freeway, Como WA",
+      "status": "Active",
+      "priority": "Urgent",
+      "type": "Shoulder Works",
+      "startDate": "2026-07-09",
+      "endDate": "2026-07-09",
+      "crew": "Crew C",
+      "equipment": [
+        "TMA Truck",
+        "Cones",
+        "Arrow Board"
+      ],
+      "emailThread": [],
+      "notes": "Emergency pavement repair",
+      "attachments": []
+    },
+    {
+      "id": "JOB-004",
+      "clientId": "CLT-004",
+      "title": "Great Eastern Hwy - Utility Works",
+      "client": "BGC Construction",
+      "location": "Great Eastern Hwy, Redcliffe WA",
+      "status": "Scheduled",
+      "priority": "Low",
+      "type": "Utility Works",
+      "startDate": "2026-08-01",
+      "endDate": "2026-08-05",
+      "crew": "Crew A",
+      "equipment": [
+        "Cones",
+        "Signs",
+        "VMS Board"
+      ],
+      "emailThread": [],
+      "notes": "Gas main upgrade - TMP to MRWA",
+      "attachments": []
+    },
+    {
+      "id": "JOB-005",
+      "clientId": "CLT-003",
+      "title": "Roe Highway - Intersection Upgrade",
+      "client": "Georgiou Group",
+      "location": "Roe Hwy & Nicholson Rd, Canning Vale WA",
+      "status": "Active",
+      "priority": "High",
+      "type": "Intersection Works",
+      "startDate": "2026-07-11",
+      "endDate": "2026-08-20",
+      "crew": "Crew B",
+      "equipment": [
+        "TMA Truck",
+        "VMS Board",
+        "Cones",
+        "Arrow Board",
+        "Barriers"
+      ],
+      "emailThread": [],
+      "notes": "Major intersection upgrade - TMP approved",
+      "attachments": []
+    },
+    {
+      "id": "JOB-006",
+      "clientId": "CLT-002",
+      "title": "St Georges Tce - Event Traffic Mgmt",
+      "client": "City of Perth",
+      "location": "St Georges Terrace, Perth WA",
+      "status": "Planning",
+      "priority": "Medium",
+      "type": "Event Traffic",
+      "startDate": "2026-07-25",
+      "endDate": "2026-07-26",
+      "crew": "Crew C",
+      "equipment": [
+        "Cones",
+        "Signs",
+        "Barriers"
+      ],
+      "emailThread": [],
+      "notes": "Perth City Festival traffic plan",
+      "attachments": []
+    }
   ],
   "job_attachments": [
-    { "id": "ATT-1715000000000", "jobId": "JOB-001", "clientId": "CLT-001", "category": "Site Photos", "originalName": "site-overview-mitchell-jul10.jpg", "storedName": "1715000000000-site.jpg", "mimeType": "image/jpeg", "size": 2457600, "path": "/api/files/1715000000000-site.jpg", "uploadedAt": "2026-07-09T14:00:00Z", "uploadedBy": "James Mitchell", "tags": ["site-photo", "mitchell-freeway"], "description": "Site overview of lane closure area - southbound Mitchell Fwy" },
-    { "id": "ATT-1715000000001", "jobId": "JOB-005", "clientId": "CLT-003", "category": "TMP Approvals", "originalName": "MRWA-Approval-RoeHwy.pdf", "storedName": "1715000000001-approval.pdf", "mimeType": "application/pdf", "size": 512000, "path": "/api/files/1715000000001-approval.pdf", "uploadedAt": "2026-07-01T10:00:00Z", "uploadedBy": "Emma Wilson", "tags": ["approval", "mrwa", "tmp"], "description": "MRWA TMP Approval for Roe Highway Intersection Upgrade" },
-    { "id": "ATT-1715000000002", "jobId": "JOB-005", "clientId": "CLT-003", "category": "Site Photos", "originalName": "roe-hwy-intersection-aerial.png", "storedName": "1715000000002-aerial.png", "mimeType": "image/png", "size": 3800000, "path": "/api/files/1715000000002-aerial.png", "uploadedAt": "2026-06-20T09:00:00Z", "uploadedBy": "James Mitchell", "tags": ["aerial", "site-plan"], "description": "Aerial view of Roe Hwy & Nicholson Rd intersection" }
+    {
+      "id": "ATT-1715000000000",
+      "jobId": "JOB-001",
+      "clientId": "CLT-001",
+      "category": "Site Photos",
+      "originalName": "site-overview-mitchell-jul10.jpg",
+      "storedName": "1715000000000-site.jpg",
+      "mimeType": "image/jpeg",
+      "size": 2457600,
+      "path": "/api/files/1715000000000-site.jpg",
+      "uploadedAt": "2026-07-09T14:00:00Z",
+      "uploadedBy": "James Mitchell",
+      "tags": [
+        "site-photo",
+        "mitchell-freeway"
+      ],
+      "description": "Site overview of lane closure area - southbound Mitchell Fwy"
+    },
+    {
+      "id": "ATT-1715000000001",
+      "jobId": "JOB-005",
+      "clientId": "CLT-003",
+      "category": "TMP Approvals",
+      "originalName": "MRWA-Approval-RoeHwy.pdf",
+      "storedName": "1715000000001-approval.pdf",
+      "mimeType": "application/pdf",
+      "size": 512000,
+      "path": "/api/files/1715000000001-approval.pdf",
+      "uploadedAt": "2026-07-01T10:00:00Z",
+      "uploadedBy": "Emma Wilson",
+      "tags": [
+        "approval",
+        "mrwa",
+        "tmp"
+      ],
+      "description": "MRWA TMP Approval for Roe Highway Intersection Upgrade"
+    },
+    {
+      "id": "ATT-1715000000002",
+      "jobId": "JOB-005",
+      "clientId": "CLT-003",
+      "category": "Site Photos",
+      "originalName": "roe-hwy-intersection-aerial.png",
+      "storedName": "1715000000002-aerial.png",
+      "mimeType": "image/png",
+      "size": 3800000,
+      "path": "/api/files/1715000000002-aerial.png",
+      "uploadedAt": "2026-06-20T09:00:00Z",
+      "uploadedBy": "James Mitchell",
+      "tags": [
+        "aerial",
+        "site-plan"
+      ],
+      "description": "Aerial view of Roe Hwy & Nicholson Rd intersection"
+    }
   ],
   "lux_documents": [
-    { "id": "LUXDOC-1715000001000", "category": "Policy", "title": "WHS Policy 2026", "originalName": "LUX-WHS-Policy-2026.pdf", "storedName": "luxdoc-whs-2026.pdf", "mimeType": "application/pdf", "size": 1200000, "path": "/api/files/luxdoc-whs-2026.pdf", "uploadedAt": "2026-01-10T08:00:00Z", "uploadedBy": "admin", "tags": ["whs", "policy", "safety"], "description": "LUX Traffic Management Work Health and Safety Policy", "version": "3.1", "status": "active" },
-    { "id": "LUXDOC-1715000001001", "category": "Template", "title": "TMP Cover Sheet Template", "originalName": "TMP-Cover-Sheet-v2.dotx", "storedName": "luxdoc-tmp-cover.dotx", "mimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.template", "size": 450000, "path": "/api/files/luxdoc-tmp-cover.dotx", "uploadedAt": "2026-02-15T10:00:00Z", "uploadedBy": "Emma Wilson", "tags": ["template", "tmp", "cover-sheet"], "description": "Standard TMP cover sheet with LUX branding and MRWA compliance header", "version": "2.0", "status": "active" },
-    { "id": "LUXDOC-1715000001002", "category": "Equipment Manual", "title": "TMA Truck Operation Manual", "originalName": "TMA-Truck-Manual.pdf", "storedName": "luxdoc-tma-manual.pdf", "mimeType": "application/pdf", "size": 8500000, "path": "/api/files/luxdoc-tma-manual.pdf", "uploadedAt": "2026-03-01T14:00:00Z", "uploadedBy": "James Mitchell", "tags": ["equipment", "tma", "manual"], "description": "Operation and safety manual for Truck Mounted Attenuators (TMA)", "version": "1.2", "status": "active" }
+    {
+      "id": "LUXDOC-1715000001000",
+      "category": "Policy",
+      "title": "WHS Policy 2026",
+      "originalName": "LUX-WHS-Policy-2026.pdf",
+      "storedName": "luxdoc-whs-2026.pdf",
+      "mimeType": "application/pdf",
+      "size": 1200000,
+      "path": "/api/files/luxdoc-whs-2026.pdf",
+      "uploadedAt": "2026-01-10T08:00:00Z",
+      "uploadedBy": "admin",
+      "tags": [
+        "whs",
+        "policy",
+        "safety"
+      ],
+      "description": "LUX Traffic Management Work Health and Safety Policy",
+      "version": "3.1",
+      "status": "active"
+    },
+    {
+      "id": "LUXDOC-1715000001001",
+      "category": "Template",
+      "title": "TMP Cover Sheet Template",
+      "originalName": "TMP-Cover-Sheet-v2.dotx",
+      "storedName": "luxdoc-tmp-cover.dotx",
+      "mimeType": "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+      "size": 450000,
+      "path": "/api/files/luxdoc-tmp-cover.dotx",
+      "uploadedAt": "2026-02-15T10:00:00Z",
+      "uploadedBy": "Emma Wilson",
+      "tags": [
+        "template",
+        "tmp",
+        "cover-sheet"
+      ],
+      "description": "Standard TMP cover sheet with LUX branding and MRWA compliance header",
+      "version": "2.0",
+      "status": "active"
+    },
+    {
+      "id": "LUXDOC-1715000001002",
+      "category": "Equipment Manual",
+      "title": "TMA Truck Operation Manual",
+      "originalName": "TMA-Truck-Manual.pdf",
+      "storedName": "luxdoc-tma-manual.pdf",
+      "mimeType": "application/pdf",
+      "size": 8500000,
+      "path": "/api/files/luxdoc-tma-manual.pdf",
+      "uploadedAt": "2026-03-01T14:00:00Z",
+      "uploadedBy": "James Mitchell",
+      "tags": [
+        "equipment",
+        "tma",
+        "manual"
+      ],
+      "description": "Operation and safety manual for Truck Mounted Attenuators (TMA)",
+      "version": "1.2",
+      "status": "active"
+    }
   ],
   "crew": [
-    { "id": "CRW-001", "name": "Crew A", "leader": "James Mitchell", "members": ["Tom Baker", "Sarah Connor", "Mike Davis"], "phone": "0401 234 567", "email": "crewa@lux-traffic.com.au", "vehicle": "Toyota HiLux - 1ELT 123" },
-    { "id": "CRW-002", "name": "Crew B", "leader": "Emma Wilson", "members": ["David Lee", "Rachel Chen", "Sam Peters"], "phone": "0402 345 678", "email": "crewb@lux-traffic.com.au", "vehicle": "Isuzu NRR - 1ELT 456" },
-    { "id": "CRW-003", "name": "Crew C", "leader": "Liam O'Brien", "members": ["Jessie Woo", "Patrick Ryan", "Natalie Grey"], "phone": "0403 456 789", "email": "crewc@lux-traffic.com.au", "vehicle": "Toyota HiLux - 1ELT 789" }
+    {
+      "id": "CRW-001",
+      "name": "Crew A",
+      "leader": "James Mitchell",
+      "members": [
+        "Tom Baker",
+        "Sarah Connor",
+        "Mike Davis"
+      ],
+      "phone": "0401 234 567",
+      "email": "crewa@lux-traffic.com.au",
+      "vehicle": "Toyota HiLux - 1ELT 123"
+    },
+    {
+      "id": "CRW-002",
+      "name": "Crew B",
+      "leader": "Emma Wilson",
+      "members": [
+        "David Lee",
+        "Rachel Chen",
+        "Sam Peters"
+      ],
+      "phone": "0402 345 678",
+      "email": "crewb@lux-traffic.com.au",
+      "vehicle": "Isuzu NRR - 1ELT 456"
+    },
+    {
+      "id": "CRW-003",
+      "name": "Crew C",
+      "leader": "Liam O'Brien",
+      "members": [
+        "Jessie Woo",
+        "Patrick Ryan",
+        "Natalie Grey"
+      ],
+      "phone": "0403 456 789",
+      "email": "crewc@lux-traffic.com.au",
+      "vehicle": "Toyota HiLux - 1ELT 789"
+    }
   ],
   "equipment": [
-    { "id": "EQ-001", "name": "TMA Truck 1", "type": "TMA Truck", "status": "Available", "lastService": "2026-06-15", "location": "Jandakot Depot" },
-    { "id": "EQ-002", "name": "TMA Truck 2", "type": "TMA Truck", "status": "In Use", "lastService": "2026-06-20", "location": "Mitchell Fwy - JOB-001" },
-    { "id": "EQ-003", "name": "VMS Board 1", "type": "VMS Board", "status": "Available", "lastService": "2026-07-01", "location": "Jandakot Depot" },
-    { "id": "EQ-004", "name": "VMS Board 2", "type": "VMS Board", "status": "In Use", "lastService": "2026-06-28", "location": "Roe Hwy - JOB-005" },
-    { "id": "EQ-005", "name": "Arrow Board 1", "type": "Arrow Board", "status": "Available", "lastService": "2026-06-25", "location": "Jandakot Depot" },
-    { "id": "EQ-006", "name": "Arrow Board 2", "type": "Arrow Board", "status": "Maintenance", "lastService": "2026-07-05", "location": "Workshop" },
-    { "id": "EQ-007", "name": "Cones Set A", "type": "Traffic Cones", "status": "Available", "lastService": "2026-07-02", "location": "Jandakot Depot" },
-    { "id": "EQ-008", "name": "Cones Set B", "type": "Traffic Cones", "status": "In Use", "lastService": "2026-07-04", "location": "Kwinana Fwy - JOB-003" }
+    {
+      "id": "EQ-001",
+      "name": "TMA Truck 1",
+      "type": "TMA Truck",
+      "status": "Available",
+      "lastService": "2026-06-15",
+      "location": "Jandakot Depot"
+    },
+    {
+      "id": "EQ-002",
+      "name": "TMA Truck 2",
+      "type": "TMA Truck",
+      "status": "In Use",
+      "lastService": "2026-06-20",
+      "location": "Mitchell Fwy - JOB-001"
+    },
+    {
+      "id": "EQ-003",
+      "name": "VMS Board 1",
+      "type": "VMS Board",
+      "status": "Available",
+      "lastService": "2026-07-01",
+      "location": "Jandakot Depot"
+    },
+    {
+      "id": "EQ-004",
+      "name": "VMS Board 2",
+      "type": "VMS Board",
+      "status": "In Use",
+      "lastService": "2026-06-28",
+      "location": "Roe Hwy - JOB-005"
+    },
+    {
+      "id": "EQ-005",
+      "name": "Arrow Board 1",
+      "type": "Arrow Board",
+      "status": "Available",
+      "lastService": "2026-06-25",
+      "location": "Jandakot Depot"
+    },
+    {
+      "id": "EQ-006",
+      "name": "Arrow Board 2",
+      "type": "Arrow Board",
+      "status": "Maintenance",
+      "lastService": "2026-07-05",
+      "location": "Workshop"
+    },
+    {
+      "id": "EQ-007",
+      "name": "Cones Set A",
+      "type": "Traffic Cones",
+      "status": "Available",
+      "lastService": "2026-07-02",
+      "location": "Jandakot Depot"
+    },
+    {
+      "id": "EQ-008",
+      "name": "Cones Set B",
+      "type": "Traffic Cones",
+      "status": "In Use",
+      "lastService": "2026-07-04",
+      "location": "Kwinana Fwy - JOB-003"
+    }
   ],
   "incidents": [
-    { "id": "INC-001", "jobId": "JOB-003", "type": "Near Miss", "date": "2026-07-09", "time": "14:30", "reportedBy": "James Mitchell", "location": "Kwinana Freeway, Como WA", "description": "Vehicle nearly entered closed lane. Driver distracted. Crew shouted warning.", "severity": "Medium", "actions": "Reported to Main Roads. Additional signage deployed.", "status": "Closed", "createdAt": "2026-07-09T14:45:00Z" },
-    { "id": "INC-002", "jobId": "JOB-001", "type": "Equipment Damage", "date": "2026-07-10", "time": "22:15", "reportedBy": "Tom Baker", "location": "Mitchell Freeway, Perth WA", "description": "TMA Truck struck by debris. Minor damage to rear bumper.", "severity": "Low", "actions": "Vehicle removed from service. Scheduled for repair.", "status": "Open", "createdAt": "2026-07-10T22:30:00Z" }
+    {
+      "id": "INC-001",
+      "jobId": "JOB-003",
+      "type": "Near Miss",
+      "date": "2026-07-09",
+      "time": "14:30",
+      "reportedBy": "James Mitchell",
+      "location": "Kwinana Freeway, Como WA",
+      "description": "Vehicle nearly entered closed lane. Driver distracted. Crew shouted warning.",
+      "severity": "Medium",
+      "actions": "Reported to Main Roads. Additional signage deployed.",
+      "status": "Closed",
+      "createdAt": "2026-07-09T14:45:00Z"
+    },
+    {
+      "id": "INC-002",
+      "jobId": "JOB-001",
+      "type": "Equipment Damage",
+      "date": "2026-07-10",
+      "time": "22:15",
+      "reportedBy": "Tom Baker",
+      "location": "Mitchell Freeway, Perth WA",
+      "description": "TMA Truck struck by debris. Minor damage to rear bumper.",
+      "severity": "Low",
+      "actions": "Vehicle removed from service. Scheduled for repair.",
+      "status": "Open",
+      "createdAt": "2026-07-10T22:30:00Z"
+    }
   ],
   "permits": [
-    { "id": "PRM-001", "jobId": "JOB-005", "authority": "Main Roads WA", "type": "TMP Approval", "appliedDate": "2026-06-20", "approvedDate": "2026-07-01", "expiryDate": "2026-08-20", "status": "Approved", "reference": "MRWA-TMP-2026-0842", "conditions": "Night works only. ATCP must be on site." },
-    { "id": "PRM-002", "jobId": "JOB-001", "authority": "Main Roads WA", "type": "TMP Approval", "appliedDate": "2026-07-01", "approvedDate": null, "expiryDate": "2026-07-12", "status": "Pending", "reference": "MRWA-TMP-2026-0915", "conditions": "" },
-    { "id": "PRM-003", "jobId": "JOB-002", "authority": "City of Perth", "type": "Works Permit", "appliedDate": "2026-07-05", "approvedDate": "2026-07-08", "expiryDate": "2026-07-20", "status": "Approved", "reference": "CP-PRM-0726-44", "conditions": "Pedestrian access maintained at all times." }
+    {
+      "id": "PRM-001",
+      "jobId": "JOB-005",
+      "authority": "Main Roads WA",
+      "type": "TMP Approval",
+      "appliedDate": "2026-06-20",
+      "approvedDate": "2026-07-01",
+      "expiryDate": "2026-08-20",
+      "status": "Approved",
+      "reference": "MRWA-TMP-2026-0842",
+      "conditions": "Night works only. ATCP must be on site."
+    },
+    {
+      "id": "PRM-002",
+      "jobId": "JOB-001",
+      "authority": "Main Roads WA",
+      "type": "TMP Approval",
+      "appliedDate": "2026-07-01",
+      "approvedDate": null,
+      "expiryDate": "2026-07-12",
+      "status": "Pending",
+      "reference": "MRWA-TMP-2026-0915",
+      "conditions": ""
+    },
+    {
+      "id": "PRM-003",
+      "jobId": "JOB-002",
+      "authority": "City of Perth",
+      "type": "Works Permit",
+      "appliedDate": "2026-07-05",
+      "approvedDate": "2026-07-08",
+      "expiryDate": "2026-07-20",
+      "status": "Approved",
+      "reference": "CP-PRM-0726-44",
+      "conditions": "Pedestrian access maintained at all times."
+    }
   ],
   "timesheets": [
-    { "id": "TS-001", "crewId": "CRW-001", "jobId": "JOB-001", "date": "2026-07-10", "member": "Tom Baker", "startTime": "19:30", "endTime": "05:30", "hours": 10, "breakHours": 1, "notes": "Night shift. TMA truck setup.", "status": "Approved" },
-    { "id": "TS-002", "crewId": "CRW-001", "jobId": "JOB-001", "date": "2026-07-10", "member": "Sarah Connor", "startTime": "19:30", "endTime": "05:30", "hours": 10, "breakHours": 1, "notes": "Night shift. Cone placement.", "status": "Approved" },
-    { "id": "TS-003", "crewId": "CRW-001", "jobId": "JOB-001", "date": "2026-07-11", "member": "Tom Baker", "startTime": "19:30", "endTime": "05:30", "hours": 10, "breakHours": 1, "notes": "", "status": "Pending" }
+    {
+      "id": "TS-001",
+      "crewId": "CRW-001",
+      "jobId": "JOB-001",
+      "date": "2026-07-10",
+      "member": "Tom Baker",
+      "startTime": "19:30",
+      "endTime": "05:30",
+      "hours": 10,
+      "breakHours": 1,
+      "notes": "Night shift. TMA truck setup.",
+      "status": "Approved"
+    },
+    {
+      "id": "TS-002",
+      "crewId": "CRW-001",
+      "jobId": "JOB-001",
+      "date": "2026-07-10",
+      "member": "Sarah Connor",
+      "startTime": "19:30",
+      "endTime": "05:30",
+      "hours": 10,
+      "breakHours": 1,
+      "notes": "Night shift. Cone placement.",
+      "status": "Approved"
+    },
+    {
+      "id": "TS-003",
+      "crewId": "CRW-001",
+      "jobId": "JOB-001",
+      "date": "2026-07-11",
+      "member": "Tom Baker",
+      "startTime": "19:30",
+      "endTime": "05:30",
+      "hours": 10,
+      "breakHours": 1,
+      "notes": "",
+      "status": "Pending"
+    }
   ],
   "tmpDocuments": [
-    { "id": "TMP-001", "jobId": "JOB-005", "title": "Roe Hwy Intersection Upgrade TMP", "version": "2.0", "status": "Approved", "createdDate": "2026-06-15", "approvedDate": "2026-07-01", "preparedBy": "Emma Wilson", "notes": "Standard TMP per WA Code of Practice 2024" }
+    {
+      "id": "TMP-001",
+      "jobId": "JOB-005",
+      "title": "Roe Hwy Intersection Upgrade TMP",
+      "version": "2.0",
+      "status": "Approved",
+      "createdDate": "2026-06-15",
+      "approvedDate": "2026-07-01",
+      "preparedBy": "Emma Wilson",
+      "notes": "Standard TMP per WA Code of Practice 2024"
+    }
   ],
   "emailLog": [],
   "emailTemplates": [
-    { "id": "EMT-001", "name": "TMP Approval Request", "subject": "TMP Approval - {job.title}", "body": "Dear {client.name},\n\nPlease find attached the Traffic Management Plan for {job.title} at {job.location}.\n\nWorks: {job.startDate} to {job.endDate}\nType: {job.type}\n\nPlease review and provide approval.\n\nRegards,\nLUX Traffic Management" },
-    { "id": "EMT-002", "name": "Job Notification", "subject": "Works Notification - {job.title}", "body": "Dear Stakeholder,\n\nLUX Traffic Management will be undertaking {job.type} at {job.location} from {job.startDate}.\n\nRegards,\nLUX Traffic Management" },
-    { "id": "EMT-003", "name": "Job Completion Report", "subject": "Completion Report - {job.title}", "body": "Dear {client.name},\n\nCompleted: {job.title} at {job.location}\nWorks finished: {job.endDate}\n\nRegards,\nLUX Traffic Management" }
+    {
+      "id": "EMT-001",
+      "name": "TMP Approval Request",
+      "subject": "TMP Approval - {job.title}",
+      "body": "Dear {client.name},\n\nPlease find attached the Traffic Management Plan for {job.title} at {job.location}.\n\nWorks: {job.startDate} to {job.endDate}\nType: {job.type}\n\nPlease review and provide approval.\n\nRegards,\nLUX Traffic Management"
+    },
+    {
+      "id": "EMT-002",
+      "name": "Job Notification",
+      "subject": "Works Notification - {job.title}",
+      "body": "Dear Stakeholder,\n\nLUX Traffic Management will be undertaking {job.type} at {job.location} from {job.startDate}.\n\nRegards,\nLUX Traffic Management"
+    },
+    {
+      "id": "EMT-003",
+      "name": "Job Completion Report",
+      "subject": "Completion Report - {job.title}",
+      "body": "Dear {client.name},\n\nCompleted: {job.title} at {job.location}\nWorks finished: {job.endDate}\n\nRegards,\nLUX Traffic Management"
+    }
   ]
 }

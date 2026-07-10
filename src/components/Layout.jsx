@@ -1,28 +1,33 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, ClipboardList, Users, HardHat, Wrench, Mail, FileDown, Settings, Menu, LogOut, AlertTriangle, FileText, CalendarDays, ShieldCheck, Bot, BarChart3, Zap, ClipboardCheck, DollarSign, BookOpen, History, Upload, Calendar, Bell, Columns3 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { useAuth } from '../context/AuthContext';
 import NotificationBell from './NotificationBell';
 
 const navItems = [
-  { to: '/', icon: LayoutDashboard, label: 'Dashboard', roles: ['admin', 'manager', 'crew', 'viewer'] },
-  { to: '/jobs', icon: ClipboardList, label: 'Job Board', roles: ['admin', 'manager', 'crew', 'viewer'] },
-  { to: '/kanban', icon: Columns3, label: 'Kanban', roles: ['admin', 'manager'] },
-  { to: '/clients', icon: Users, label: 'Clients', roles: ['admin', 'manager'] },
+  // ── Planning ──
+  { to: '/', icon: LayoutDashboard, label: 'Dashboard', roles: ['admin', 'manager', 'crew', 'viewer'], section: 'PLANNING' },
   { to: '/scoping', icon: ClipboardCheck, label: 'Scoping & Intake', roles: ['admin', 'manager'] },
   { to: '/quotes', icon: DollarSign, label: 'Quotes & Proposals', roles: ['admin', 'manager'] },
-  { to: '/lux-repository', icon: BookOpen, label: 'LUX Repository', roles: ['admin', 'manager', 'crew'] },
-  { to: '/calendar', icon: Calendar, label: 'Schedule', roles: ['admin', 'manager', 'crew', 'viewer'] },
-  { to: '/crew', icon: HardHat, label: 'Crew', roles: ['admin', 'manager'] },
-  { to: '/timesheets', icon: CalendarDays, label: 'Timesheets', roles: ['admin', 'manager', 'crew'] },
-  { to: '/incidents', icon: AlertTriangle, label: 'Incidents', roles: ['admin', 'manager', 'crew'] },
-  { to: '/permits', icon: ShieldCheck, label: 'Permits', roles: ['admin', 'manager'] },
   { to: '/tmp-generator', icon: FileText, label: 'TMP Generator', roles: ['admin', 'manager'] },
+  { to: '/permits', icon: ShieldCheck, label: 'Permits & Approvals', roles: ['admin', 'manager'] },
+  { to: '/lux-repository', icon: BookOpen, label: 'LUX Repository', roles: ['admin', 'manager', 'crew'] },
+  { to: '/calendar', icon: Calendar, label: 'Planning Calendar', roles: ['admin', 'manager', 'crew', 'viewer'] },
+  { to: '/kanban', icon: Columns3, label: 'Planning Board', roles: ['admin', 'manager'] },
+  { to: '/reports', icon: BarChart3, label: 'Reports & Analytics', roles: ['admin', 'manager', 'viewer'] },
+
+  // ── Operations ──
+  { to: '/jobs', icon: ClipboardList, label: 'Job Board', roles: ['admin', 'manager', 'crew', 'viewer'], section: 'OPERATIONS' },
+  { to: '/crew', icon: HardHat, label: 'Crew', roles: ['admin', 'manager'] },
+  { to: '/equipment', icon: Wrench, label: 'Equipment', roles: ['admin', 'manager', 'crew'] },
+  { to: '/incidents', icon: AlertTriangle, label: 'Incidents', roles: ['admin', 'manager', 'crew'] },
+  { to: '/timesheets', icon: CalendarDays, label: 'Timesheets', roles: ['admin', 'manager', 'crew'] },
+  { to: '/clients', icon: Users, label: 'Clients', roles: ['admin', 'manager'] },
+
+  // ── Admin ──
+  { to: '/email', icon: Mail, label: 'Email & Templates', roles: ['admin', 'manager'], section: 'ADMIN' },
   { to: '/agents', icon: Bot, label: 'Agents', roles: ['admin', 'manager'] },
   { to: '/automation', icon: Zap, label: 'Automation', roles: ['admin'] },
-  { to: '/reports', icon: BarChart3, label: 'Reports', roles: ['admin', 'manager', 'viewer'] },
-  { to: '/equipment', icon: Wrench, label: 'Equipment', roles: ['admin', 'manager', 'crew'] },
-  { to: '/email', icon: Mail, label: 'Email & Templates', roles: ['admin', 'manager'] },
   { to: '/notifications', icon: Bell, label: 'Notifications', roles: ['admin', 'manager', 'crew'] },
   { to: '/import', icon: Upload, label: 'Bulk Import', roles: ['admin', 'manager'] },
   { to: '/export', icon: FileDown, label: 'Export', roles: ['admin', 'manager', 'viewer'] },
@@ -41,6 +46,19 @@ export default function Layout() {
   };
 
   const visibleItems = navItems.filter(item => item.roles.some(r => hasRole(r)));
+
+  // Deduplicate section labels for rendered separators
+  const renderSectionLabel = (item, i) => {
+    if (!item.section) return null;
+    const prev = visibleItems[i - 1];
+    if (prev && prev.section === item.section) return null;
+    return (
+      <div key={`sec-${item.section}`} style={{
+        fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
+        color: 'rgba(255,255,255,0.35)', padding: '1rem 1rem 0.35rem',
+      }}>{item.section}</div>
+    );
+  };
 
   useEffect(() => {
     const apply = () => {
@@ -71,9 +89,10 @@ export default function Layout() {
           </div>
         </div>
         <nav style={{ flex: 1, padding: '0.75rem', overflowY: 'auto' }}>
-          {visibleItems.map(item => (
-            <NavLink
-              key={item.to}
+          {visibleItems.map((item, i) => (
+            <Fragment key={item.to}>
+              {renderSectionLabel(item, i)}
+              <NavLink
               to={item.to}
               end={item.to === '/'}
               onClick={() => setSidebarOpen(false)}
@@ -89,7 +108,8 @@ export default function Layout() {
               <item.icon size={18} />
               {item.label}
             </NavLink>
-          ))}
+          </Fragment>
+        ))}
         </nav>
         <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.1)', fontSize: '0.75rem', opacity: 0.5 }}>
           LUX Traffic Management v2.0<br />
