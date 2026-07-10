@@ -103,6 +103,14 @@ export const getTimesheets = () => request('/timesheets');
 // ── Audit Log ──
 export function getAuditLog() { return request('/auditLog'); }
 
+// ── Users ──
+export function getUsers() { return request('/users'); }
+export async function saveUser(user) {
+  if (user.id) return request(`/api/users/${user.id}`, { method: 'PATCH', body: JSON.stringify(user) });
+  return request('/api/users', { method: 'POST', body: JSON.stringify(user) });
+}
+export function deleteUser(id) { return request(`/api/users/${id}`, { method: 'DELETE' }); }
+
 // ── Notifications ──
 export function getNotifications() { return request('/notifications'); }
 export function markNotificationRead(id) { return request(`/notifications/${id}`, { method: 'PATCH', body: JSON.stringify({ read: true }) }); }

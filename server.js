@@ -5,8 +5,10 @@ import path from 'path';
 import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'lux-jwt-secret-2026-change-in-prod';
+const SALT_ROUNDS = 10;
 
 const isPkg = !!process.pkg;
 const ROOT = isPkg ? path.dirname(process.execPath) : process.cwd();
@@ -75,12 +77,24 @@ function authenticateJWT(req, res, next) {
 }
 
 // Login
-server.use((req, res, next) => {
+server.use(async (req, res, next) => {
   if (req.method === 'POST' && req.path === '/login') {
     const { email, password } = req.body;
     const db = JSON.parse(JSON.stringify(router.db.getState()));
-    const user = db.users?.find(u => u.email === email && u.password === password);
-    if (user) {
+    const user = db.users?.find(u => u.email === email);
+    if (!user) return res.status(401).json({ success: false, error: 'Invalid credentials' });
+    let valid = false;
+    if (user.password && user.password.startsWith('$2a$') || user.password?.startsWith('$2b$')) {
+      valid = await bcrypt.compare(password, user.password).catch(() => false);
+    } else {
+      valid = user.password === password;
+      if (valid) {
+        user.password = await bcrypt.hash(password, SALT_ROUNDS);
+        db.users = db.users.map(u => u.email === email ? user : u);
+        router.db.setState(db).write();
+      }
+    }
+    if (valid) {
       const { password: _, ...safeUser } = user;
       const token = jwt.sign(safeUser, JWT_SECRET, { expiresIn: '24h' });
       return res.json({ success: true, token, user: safeUser });
@@ -92,6 +106,44 @@ server.use((req, res, next) => {
 
 // Apply JWT auth to all subsequent routes
 server.use(authenticateJWT);
+
+// User management — hash passwords on save
+server.post('/api/users', async (req, res) => {
+  try {
+    const db = JSON.parse(JSON.stringify(router.db.getState()));
+    const user = { ...req.body, id: db.users?.length ? Math.max(...db.users.map(u => u.id)) + 1 : 1 };
+    if (user.password) user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
+    db.users = db.users || [];
+    db.users.push(user);
+    router.db.setState(db).write();
+    const { password: _, ...safe } = user;
+    res.json(safe);
+  } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+server.patch('/api/users/:id', async (req, res) => {
+  try {
+    const db = JSON.parse(JSON.stringify(router.db.getState()));
+    const idx = db.users?.findIndex(u => u.id === parseInt(req.params.id) || u.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'User not found' });
+    const update = { ...req.body };
+    if (update.password) update.password = await bcrypt.hash(update.password, SALT_ROUNDS);
+    else delete update.password;
+    db.users[idx] = { ...db.users[idx], ...update };
+    router.db.setState(db).write();
+    const { password: _, ...safe } = db.users[idx];
+    res.json(safe);
+  } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+server.delete('/api/users/:id', (req, res) => {
+  const db = JSON.parse(JSON.stringify(router.db.getState()));
+  const idx = db.users?.findIndex(u => u.id === parseInt(req.params.id) || u.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'User not found' });
+  db.users.splice(idx, 1);
+  router.db.setState(db).write();
+  res.json({ success: true });
+});
 
 // File upload — attach to a job
 server.post('/api/upload', upload.single('file'), (req, res) => {

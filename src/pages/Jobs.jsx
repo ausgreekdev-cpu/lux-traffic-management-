@@ -31,6 +31,7 @@ export default function Jobs() {
   const [jobFiles, setJobFiles] = useState([]);
   const [clients, setClients] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
   const templates = getTemplates();
 
   useEffect(() => { getClients().then(setClients).catch(() => {}); }, []);
@@ -65,6 +66,15 @@ export default function Jobs() {
   };
 
   const saveJob = () => {
+    const errors = {};
+    if (!form.title) errors.title = 'Job title is required';
+    if (!form.clientId) errors.clientId = 'Client is required';
+    if (!form.location) errors.location = 'Location is required';
+    if (!form.startDate) errors.startDate = 'Start date is required';
+    if (!form.endDate) errors.endDate = 'End date is required';
+    if (form.startDate && form.endDate && form.endDate < form.startDate) errors.endDate = 'End date must be after start date';
+    setFormErrors(errors);
+    if (Object.keys(errors).length > 0) return;
     if (editJob) {
       setJobList(jobList.map(j => j.id === editJob.id ? { ...j, ...form, attachments: form.attachments || [] } : j));
     } else {
@@ -201,11 +211,11 @@ export default function Jobs() {
             <h2>{editJob ? 'Edit Job' : 'Create New Job'}</h2>
             <div className="grid-2">
               <div className="form-group">
-                <label>Job Title</label>
-                <input className="form-input" value={form.title} onChange={e => setForm({...form, title: e.target.value})} placeholder="e.g. Mitchell Frwy - Lane Closure" />
+                <label>Job Title {formErrors.title && <span style={{ color: '#ef4444', fontSize: '0.7rem' }}>— {formErrors.title}</span>}</label>
+                <input className="form-input" value={form.title} onChange={e => setForm({...form, title: e.target.value})} placeholder="e.g. Mitchell Frwy - Lane Closure" style={formErrors.title ? { borderColor: '#ef4444' } : {}} />
               </div>
               <div className="form-group">
-                <label>Client</label>
+                <label>Client {formErrors.clientId && <span style={{ color: '#ef4444', fontSize: '0.7rem' }}>— {formErrors.clientId}</span>}</label>
                 <select className="form-select" value={form.clientId} onChange={e => {
                   const c = clients.find(cl => cl.id === e.target.value);
                   setForm({...form, clientId: e.target.value, client: c ? c.name : '' });
@@ -215,8 +225,8 @@ export default function Jobs() {
                 </select>
               </div>
               <div className="form-group">
-                <label>Location</label>
-                <input className="form-input" value={form.location} onChange={e => setForm({...form, location: e.target.value})} placeholder="Full road location" />
+                <label>Location {formErrors.location && <span style={{ color: '#ef4444', fontSize: '0.7rem' }}>— {formErrors.location}</span>}</label>
+                <input className="form-input" value={form.location} onChange={e => setForm({...form, location: e.target.value})} placeholder="Full road location" style={formErrors.location ? { borderColor: '#ef4444' } : {}} />
               </div>
               <div className="form-group">
                 <label>Job Type</label>
@@ -237,12 +247,12 @@ export default function Jobs() {
                 </select>
               </div>
               <div className="form-group">
-                <label>Start Date</label>
-                <input className="form-input" type="date" value={form.startDate} onChange={e => setForm({...form, startDate: e.target.value})} />
+                <label>Start Date {formErrors.startDate && <span style={{ color: '#ef4444', fontSize: '0.7rem' }}>— {formErrors.startDate}</span>}</label>
+                <input className="form-input" type="date" value={form.startDate} onChange={e => setForm({...form, startDate: e.target.value})} style={formErrors.startDate ? { borderColor: '#ef4444' } : {}} />
               </div>
               <div className="form-group">
-                <label>End Date</label>
-                <input className="form-input" type="date" value={form.endDate} onChange={e => setForm({...form, endDate: e.target.value})} />
+                <label>End Date {formErrors.endDate && <span style={{ color: '#ef4444', fontSize: '0.7rem' }}>— {formErrors.endDate}</span>}</label>
+                <input className="form-input" type="date" value={form.endDate} onChange={e => setForm({...form, endDate: e.target.value})} style={formErrors.endDate ? { borderColor: '#ef4444' } : {}} />
               </div>
               <div className="form-group">
                 <label>Crew</label>

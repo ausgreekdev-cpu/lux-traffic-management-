@@ -26,8 +26,11 @@ export default function KanbanBoard() {
   const [search, setSearch] = useState('');
   const [clientFilter, setClientFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
+  const [plannerFilter, setPlannerFilter] = useState('all');
   const [dragId, setDragId] = useState(null);
   const [dropLane, setDropLane] = useState(null);
+
+  const planners = [...new Set(allJobs.map(j => j.planner).filter(Boolean))];
 
   const fetchData = useCallback(async () => {
     try {
@@ -42,7 +45,8 @@ export default function KanbanBoard() {
   const filtered = allJobs.filter(j =>
     (search === '' || j.title.toLowerCase().includes(search.toLowerCase()) || j.client?.toLowerCase().includes(search.toLowerCase()) || j.location?.toLowerCase().includes(search.toLowerCase())) &&
     (clientFilter === 'all' || j.clientId === clientFilter) &&
-    (priorityFilter === 'all' || j.priority === priorityFilter)
+    (priorityFilter === 'all' || j.priority === priorityFilter) &&
+    (plannerFilter === 'all' || j.planner === plannerFilter)
   );
 
   const grouped = Object.fromEntries(STATUS_LANES.map(s => [s, filtered.filter(j => j.status === s)]));
@@ -91,6 +95,10 @@ export default function KanbanBoard() {
           <select className="form-select" style={{ width: 'auto' }} value={priorityFilter} onChange={e => setPriorityFilter(e.target.value)}>
             <option value="all">All Priorities</option>
             {['Urgent', 'High', 'Medium', 'Low'].map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+          <select className="form-select" style={{ width: 'auto' }} value={plannerFilter} onChange={e => setPlannerFilter(e.target.value)}>
+            <option value="all">All Planners</option>
+            {planners.map(p => <option key={p} value={p}>{p}</option>)}
           </select>
         </div>
       </div>

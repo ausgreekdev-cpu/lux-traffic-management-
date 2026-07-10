@@ -28,6 +28,7 @@ const BulkImport = lazy(() => import('./pages/BulkImport'));
 const CalendarView = lazy(() => import('./pages/CalendarView'));
 const Notifications = lazy(() => import('./pages/Notifications'));
 const KanbanBoard = lazy(() => import('./pages/KanbanBoard'));
+const UserManagement = lazy(() => import('./pages/UserManagement'));
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
@@ -71,6 +72,7 @@ function AppRoutes() {
           <Route path="import" element={<BulkImport />} />
           <Route path="audit-log" element={<AuditLog />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="users" element={<UserManagement />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

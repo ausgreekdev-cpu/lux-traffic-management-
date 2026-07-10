@@ -12,6 +12,7 @@
     "build:exe": "npm run build && node scripts/build-exe.cjs"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "concurrently": "^9.2.3",
     "csv-parse": "^7.0.1",
     "json-server": "^0.17.4",

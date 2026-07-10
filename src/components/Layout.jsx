@@ -33,6 +33,7 @@ const navItems = [
   { to: '/import', icon: Upload, label: 'Bulk Import', roles: ['admin', 'manager'] },
   { to: '/export', icon: FileDown, label: 'Export', roles: ['admin', 'manager', 'viewer'] },
   { to: '/audit-log', icon: History, label: 'Audit Log', roles: ['admin'] },
+  { to: '/users', icon: ShieldCheck, label: 'User Management', roles: ['admin'] },
   { to: '/settings', icon: Settings, label: 'Settings', roles: ['admin'] },
 ];
 
