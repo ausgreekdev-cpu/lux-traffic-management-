@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Columns3, Search, ArrowUpDown, Clock, MapPin, HardHat, User, AlertCircle } from 'lucide-react';
+import { Columns3, Search, ArrowUpDown, Clock, MapPin, HardHat, User, UserCircle, AlertCircle } from 'lucide-react';
 import { getJobs, saveJob, getClients } from '../services/dataService';
 
 const STATUS_LANES = ['Planning', 'Scheduled', 'Active', 'On Hold', 'Completed', 'Cancelled'];
@@ -152,6 +152,7 @@ export default function KanbanBoard() {
                       <span style={{ fontSize: '0.65rem', padding: '1px 5px', borderRadius: 4, background: PRIORITY_BADGE[job.priority]?.bg || '#f3f4f6', color: PRIORITY_BADGE[job.priority]?.color || '#6b7280', fontWeight: 600 }}>{job.priority}</span>
                       <span style={{ fontSize: '0.65rem', color: 'var(--lux-gray)', display: 'flex', alignItems: 'center', gap: '0.15rem' }}><Clock size={10} /> {job.startDate}</span>
                       {job.crew && <span style={{ fontSize: '0.65rem', color: 'var(--lux-gray)', display: 'flex', alignItems: 'center', gap: '0.15rem' }}><HardHat size={10} /> {job.crew}</span>}
+                      {job.planner && <span style={{ fontSize: '0.65rem', color: 'var(--lux-gray)', display: 'flex', alignItems: 'center', gap: '0.15rem' }}><UserCircle size={10} /> {job.planner}</span>}
                     </div>
                   </div>
                 ))}

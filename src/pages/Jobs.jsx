@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Plus, Mail, Send, CheckCircle, Upload, Paperclip, File, X, Zap, Download, Trash2, FolderOpen } from 'lucide-react';
+import { Search, Plus, Mail, Send, CheckCircle, Upload, Paperclip, File, X, Zap, Download, Trash2, FolderOpen, UserCircle } from 'lucide-react';
 import { workflowStatuses, jobPriorities, jobTypes, exportFormats } from '../data/mockData';
 import { renderTemplate, sendEmail, generateAuthorityExport } from '../utils/emailUtils';
 import { getTemplates } from '../services/templateService';
@@ -7,12 +7,12 @@ import { logAction } from '../services/agentLogger';
 import { getJobAttachments, uploadAttachment, deleteAttachment, getClients } from '../services/dataService';
 
 const defaultJobs = [
-  { id: 'JOB-001', title: 'Mitchell Frwy - Lane Closure (Southbound)', client: 'Main Roads WA', location: 'Mitchell Freeway, Perth WA', status: 'Active', priority: 'High', type: 'Lane Closure', startDate: '2026-07-10', endDate: '2026-07-12', crew: 'Crew A', equipment: ['TMA Truck', 'Cones', 'Signs'], emailThread: [], notes: 'Night works 8pm-5am', attachments: [] },
-  { id: 'JOB-002', title: 'Elizabeth Quay Bus Bridge Works', client: 'City of Perth', location: 'Elizabeth Quay Bus Bridge, Perth WA', status: 'Scheduled', priority: 'Medium', type: 'Bridge Works', startDate: '2026-07-15', endDate: '2026-07-20', crew: 'Crew B', equipment: ['VMS Board', 'Cones', 'TMA Truck'], emailThread: [], notes: 'Major event coordination required', attachments: [] },
-  { id: 'JOB-003', title: 'Kwinana Fwy - Shoulder Works', client: 'Main Roads WA', location: 'Kwinana Freeway, Como WA', status: 'Active', priority: 'Urgent', type: 'Shoulder Works', startDate: '2026-07-09', endDate: '2026-07-09', crew: 'Crew C', equipment: ['TMA Truck', 'Cones', 'Arrow Board'], emailThread: [], notes: 'Emergency pavement repair', attachments: [] },
-  { id: 'JOB-004', title: 'Great Eastern Hwy - Utility Works', client: 'BGC Construction', location: 'Great Eastern Hwy, Redcliffe WA', status: 'Planning', priority: 'Low', type: 'Utility Works', startDate: '2026-08-01', endDate: '2026-08-05', crew: 'Crew A', equipment: ['Cones', 'Signs', 'VMS Board'], emailThread: [], notes: 'Gas main upgrade - TMP to MRWA', attachments: [] },
-  { id: 'JOB-005', title: 'Roe Highway - Intersection Upgrade', client: 'Georgiou Group', location: 'Roe Hwy & Nicholson Rd, Canning Vale WA', status: 'Active', priority: 'High', type: 'Intersection Works', startDate: '2026-07-11', endDate: '2026-08-20', crew: 'Crew B', equipment: ['TMA Truck', 'VMS Board', 'Cones', 'Arrow Board', 'Barriers'], emailThread: [], notes: 'Major intersection upgrade - TMP approved', attachments: [] },
-  { id: 'JOB-006', title: 'St Georges Tce - Event Traffic Mgmt', client: 'City of Perth', location: 'St Georges Terrace, Perth WA', status: 'Scheduled', priority: 'Medium', type: 'Event Traffic', startDate: '2026-07-25', endDate: '2026-07-26', crew: 'Crew C', equipment: ['Cones', 'Signs', 'Barriers'], emailThread: [], notes: 'Perth City Festival traffic plan', attachments: [] },
+  { id: 'JOB-001', title: 'Mitchell Frwy - Lane Closure (Southbound)', client: 'Main Roads WA', location: 'Mitchell Freeway, Perth WA', status: 'Active', priority: 'High', type: 'Lane Closure', startDate: '2026-07-10', endDate: '2026-07-12', crew: 'Crew A', planner: 'Emma Wilson', equipment: ['TMA Truck', 'Cones', 'Signs'], emailThread: [], notes: 'Night works 8pm-5am', attachments: [] },
+  { id: 'JOB-002', title: 'Elizabeth Quay Bus Bridge Works', client: 'City of Perth', location: 'Elizabeth Quay Bus Bridge, Perth WA', status: 'Scheduled', priority: 'Medium', type: 'Bridge Works', startDate: '2026-07-15', endDate: '2026-07-20', crew: 'Crew B', planner: 'James Mitchell', equipment: ['VMS Board', 'Cones', 'TMA Truck'], emailThread: [], notes: 'Major event coordination required', attachments: [] },
+  { id: 'JOB-003', title: 'Kwinana Fwy - Shoulder Works', client: 'Main Roads WA', location: 'Kwinana Freeway, Como WA', status: 'Active', priority: 'Urgent', type: 'Shoulder Works', startDate: '2026-07-09', endDate: '2026-07-09', crew: 'Crew C', planner: 'Emma Wilson', equipment: ['TMA Truck', 'Cones', 'Arrow Board'], emailThread: [], notes: 'Emergency pavement repair', attachments: [] },
+  { id: 'JOB-004', title: 'Great Eastern Hwy - Utility Works', client: 'BGC Construction', location: 'Great Eastern Hwy, Redcliffe WA', status: 'Planning', priority: 'Low', type: 'Utility Works', startDate: '2026-08-01', endDate: '2026-08-05', crew: 'Crew A', planner: '', equipment: ['Cones', 'Signs', 'VMS Board'], emailThread: [], notes: 'Gas main upgrade - TMP to MRWA', attachments: [] },
+  { id: 'JOB-005', title: 'Roe Highway - Intersection Upgrade', client: 'Georgiou Group', location: 'Roe Hwy & Nicholson Rd, Canning Vale WA', status: 'Active', priority: 'High', type: 'Intersection Works', startDate: '2026-07-11', endDate: '2026-08-20', crew: 'Crew B', planner: 'James Mitchell', equipment: ['TMA Truck', 'VMS Board', 'Cones', 'Arrow Board', 'Barriers'], emailThread: [], notes: 'Major intersection upgrade - TMP approved', attachments: [] },
+  { id: 'JOB-006', title: 'St Georges Tce - Event Traffic Mgmt', client: 'City of Perth', location: 'St Georges Terrace, Perth WA', status: 'Scheduled', priority: 'Medium', type: 'Event Traffic', startDate: '2026-07-25', endDate: '2026-07-26', crew: 'Crew C', planner: '', equipment: ['Cones', 'Signs', 'Barriers'], emailThread: [], notes: 'Perth City Festival traffic plan', attachments: [] },
 ];
 
 export default function Jobs() {
@@ -24,8 +24,9 @@ export default function Jobs() {
   const [editJob, setEditJob] = useState(null);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
+  const [plannerFilter, setPlannerFilter] = useState('all');
   const [emailLog, setEmailLog] = useState([]);
-  const [form, setForm] = useState({ title: '', client: '', clientId: '', location: '', status: 'Planning', priority: 'Medium', type: 'Lane Closure', startDate: '', endDate: '', crew: '', notes: '' });
+  const [form, setForm] = useState({ title: '', client: '', clientId: '', location: '', status: 'Planning', priority: 'Medium', type: 'Lane Closure', startDate: '', endDate: '', crew: '', planner: '', notes: '' });
   const [emailForm, setEmailForm] = useState({ templateId: '', to: '', cc: '', attachments: [] });
   const [jobFiles, setJobFiles] = useState([]);
   const [clients, setClients] = useState([]);
@@ -41,13 +42,16 @@ export default function Jobs() {
 
   const clientNames = [...new Set(jobList.map(j => j.client))];
 
+  const plannerList = [...new Set(jobList.map(j => j.planner).filter(Boolean))];
+
   const filteredJobs = jobList.filter(j => {
     const q = search.toLowerCase();
     return (statusFilter === 'All' || j.status === statusFilter) &&
+      (plannerFilter === 'all' || j.planner === plannerFilter) &&
       (j.title.toLowerCase().includes(q) || j.location.toLowerCase().includes(q) || j.id.toLowerCase().includes(q) || j.client.toLowerCase().includes(q));
   });
 
-  const openNew = () => { setEditJob(null); setForm({ title: '', client: '', clientId: '', location: '', status: 'Planning', priority: 'Medium', type: 'Lane Closure', startDate: '', endDate: '', crew: '', notes: '' }); setShowModal(true); };
+  const openNew = () => { setEditJob(null); setForm({ title: '', client: '', clientId: '', location: '', status: 'Planning', priority: 'Medium', type: 'Lane Closure', startDate: '', endDate: '', crew: '', planner: '', notes: '' }); setShowModal(true); };
   const openEdit = (job) => { setEditJob(job); setForm({ ...job, clientId: job.clientId || '' }); setShowModal(true); getJobAttachments(job.id).then(setJobFiles).catch(() => setJobFiles([])); };
 
   const handleFileAttach = (e) => {
@@ -146,6 +150,10 @@ export default function Jobs() {
             <option value="All">All Statuses</option>
             {workflowStatuses.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
+          <select className="form-select" style={{ width: 'auto' }} value={plannerFilter} onChange={e => setPlannerFilter(e.target.value)}>
+            <option value="all">All Planners</option>
+            {plannerList.map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
           <span style={{ fontSize: '0.8rem', color: 'var(--lux-gray)' }}>{filteredJobs.length} jobs</span>
         </div>
       </div>
@@ -153,7 +161,7 @@ export default function Jobs() {
       <div className="card" style={{ overflowX: 'auto' }}>
         <table>
           <thead>
-            <tr><th>ID</th><th>Title</th><th>Client</th><th>Location</th><th>Status</th><th>Priority</th><th>Type</th><th>Duration</th><th>Crew</th><th>Files</th><th>Actions</th></tr>
+            <tr><th>ID</th><th>Title</th><th>Client</th><th>Location</th><th>Status</th><th>Priority</th><th>Type</th><th>Duration</th><th>Planner</th><th>Crew</th><th>Files</th><th>Actions</th></tr>
           </thead>
           <tbody>
             {filteredJobs.map(job => (
@@ -171,6 +179,7 @@ export default function Jobs() {
                 <td><span className={`badge badge-${job.priority === 'Urgent' ? 'urgent' : job.priority === 'High' ? 'active' : job.priority === 'Low' ? 'completed' : 'info'}`}>{job.priority}</span></td>
                 <td style={{ fontSize: '0.8rem' }}>{job.type}</td>
                 <td style={{ fontSize: '0.8rem', whiteSpace: 'nowrap' }}>{job.startDate} - {job.endDate}</td>
+                <td>{job.planner ? <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.8rem' }}><UserCircle size={12} /> {job.planner}</span> : <span style={{ fontSize: '0.75rem', color: 'var(--lux-gray)' }}>—</span>}</td>
                 <td><span className="badge badge-info">{job.crew}</span></td>
                 <td>{job.attachments && job.attachments.length > 0 ? <span style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: '0.75rem', color: 'var(--lux-gray)' }}><Paperclip size={12} /> {job.attachments.length}</span> : '-'}</td>
                 <td>
@@ -239,6 +248,13 @@ export default function Jobs() {
                 <label>Crew</label>
                 <select className="form-select" value={form.crew} onChange={e => setForm({...form, crew: e.target.value})}>
                   <option value="">Select crew</option><option>Crew A</option><option>Crew B</option><option>Crew C</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Planner</label>
+                <select className="form-select" value={form.planner} onChange={e => setForm({...form, planner: e.target.value})}>
+                  <option value="">Unassigned</option>
+                  {plannerList.map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
             </div>

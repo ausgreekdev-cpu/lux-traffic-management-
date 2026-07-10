@@ -3,6 +3,7 @@ import { LayoutDashboard, ClipboardList, Users, HardHat, Wrench, Mail, FileDown,
 import { useState, useEffect, Fragment } from 'react';
 import { useAuth } from '../context/AuthContext';
 import NotificationBell from './NotificationBell';
+import OnboardingTour from './OnboardingTour';
 
 const navItems = [
   // ── Planning ──
@@ -37,6 +38,7 @@ const navItems = [
 
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showTour, setShowTour] = useState(() => localStorage.getItem('lux_tour_complete') !== 'true');
   const { user, logout, hasRole } = useAuth();
   const navigate = useNavigate();
 
@@ -72,6 +74,7 @@ export default function Layout() {
   }, []);
 
   return (
+    <>
     <div className="app-layout" style={{ display: 'flex', minHeight: '100vh' }}>
       <aside className={`sidebar ${sidebarOpen ? 'sidebar--open' : ''}`}>
         <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
@@ -137,6 +140,9 @@ export default function Layout() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontWeight: 700, fontSize: '0.9rem',
                 }}>{user.avatar}</div>
+                <button onClick={() => { localStorage.removeItem('lux_tour_complete'); setShowTour(true); }} style={{ background: 'none', border: 'none', color: 'var(--lux-gray)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem' }}>
+                  ? Help
+                </button>
                 <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: 'var(--lux-gray)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem' }}>
                   <LogOut size={16} /> Logout
                 </button>
@@ -229,6 +235,8 @@ export default function Layout() {
           }
         }
       `}</style>
-    </div>
+      </div>
+      {showTour && <OnboardingTour onComplete={() => setShowTour(false)} />}
+    </>
   );
 }
